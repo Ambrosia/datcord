@@ -52,7 +52,7 @@ defmodule DiscordElixir.API.Guild do
   def edit(guild, name) when is_binary(name) do
     with :ok <- validate_name_length(name),
          url = guild |> guild_url,
-         {:ok, response} <- API.post(url, %{name: name}),
+         {:ok, response} <- API.patch(url, %{name: name}),
          do: {:ok, parse(response.body)}
   end
 
