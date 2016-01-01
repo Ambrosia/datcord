@@ -139,9 +139,9 @@ defmodule DiscordElixir.API.Guild do
 
   defp validate_name_length(name) do
     case String.length(name) do
-      x when x >= 2 and x <= 100 -> :ok
       x when x < 2 -> {:error, :too_short}
       x when x > 100 -> {:error, :too_long}
+      _ -> :ok
     end
   end
 
