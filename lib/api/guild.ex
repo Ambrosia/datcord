@@ -130,7 +130,7 @@ defmodule DiscordElixir.API.Guild do
   end
 
   def guild_url, do: "/guilds"
-  def guild_url(%Guild{id: id}), do: guild_url <> "/" <> id
+  def guild_url(%Guild{id: id}), do: guild_url(id)
   def guild_url(guild_id), do: guild_url <> "/" <> to_string(guild_id)
 
   defp validate_name_length(name) do
@@ -141,7 +141,7 @@ defmodule DiscordElixir.API.Guild do
     end
   end
 
-  defp parse(guild) do
+  def parse(guild) do
     guild = for {key, val} <- guild, into: %{} do
       {String.to_existing_atom(key), val}
     end
