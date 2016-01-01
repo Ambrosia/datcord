@@ -8,7 +8,9 @@ defmodule DiscordElixir.API do
   end
 
   defp process_request_headers(headers) do
-    add_token_header(headers)
+    headers
+    |> add_json_headers
+    |> add_token_header
   end
 
   defp process_request_body(map) do
@@ -21,6 +23,11 @@ defmodule DiscordElixir.API do
 
   defp add_token_header(headers) do
     [{"Authorization", token} | headers]
+  end
+
+  defp add_json_headers(headers) do
+    [{"Accept", "application/json"},
+     {"Content-Type", "application/json"} | headers]
   end
 
   defp token do
