@@ -22,7 +22,7 @@ defmodule DiscordElixir.API.Guild do
   """
   def create(name) when is_binary(name) do
     with :ok <- validate_name_length(name),
-         {:ok, response} <- API.post("/guilds", %{name: name}),
+         {:ok, response} <- API.post(guild_url, %{name: name}),
          do: {:ok, parse(response.body)}
   end
 
@@ -129,13 +129,9 @@ defmodule DiscordElixir.API.Guild do
     guilds
   end
 
-  defp guild_url(%Guild{id: id}) do
-    "/guilds/" <> id
-  end
-
-  defp guild_url(guild_id) do
-    "/guilds/" <> to_string(guild_id)
-  end
+  def guild_url, do: "/guilds"
+  def guild_url(%Guild{id: id}), do: guild_url <> "/" <> id
+  def guild_url(guild_id), do: guild_url <> "/" <> to_string(guild_id)
 
   defp validate_name_length(name) do
     case String.length(name) do
