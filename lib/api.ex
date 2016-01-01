@@ -13,9 +13,13 @@ defmodule DiscordElixir.API do
     |> add_token_header
   end
 
+  defp process_request_body(:empty), do: ""
+
   defp process_request_body(map) do
     Poison.encode!(map)
   end
+
+  defp process_response_body(""), do: nil
 
   defp process_response_body(binary) do
     Poison.decode!(binary)
