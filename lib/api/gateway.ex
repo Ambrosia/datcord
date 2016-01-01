@@ -3,8 +3,7 @@ defmodule DiscordElixir.API.Gateway do
 
   def endpoint do
     with {:ok, response} <- API.get("/gateway"),
-         url <- response.body["url"],
-         do: {:ok, url}
+         do: {:ok, response.body["url"]}
   end
 
   def endpoint! do
