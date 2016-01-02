@@ -1,40 +1,25 @@
 defmodule DiscordElixir.API do
   use HTTPoison.Base
 
-  @url "https://discordapp.com/api"
+  @endpoint "https://discordapp.com/api"
 
-  defp process_url(url) do
-    @url <> url
-  end
+  defp process_url(url), do: @endpoint <> url
 
   defp process_request_headers(headers) do
     headers
     |> add_json_headers
-    |> add_token_header
   end
 
   defp process_request_body(:empty), do: ""
-
-  defp process_request_body(map) do
-    Poison.encode!(map)
-  end
+  defp process_request_body(map), do: Poison.encode!(map)
 
   defp process_response_body(""), do: nil
+  defp process_response_body(binary), do: Poison.decode!(binary)
 
-  defp process_response_body(binary) do
-    Poison.decode!(binary)
-  end
-
-  defp add_token_header(headers) do
-    [{"Authorization", token} | headers]
-  end
+  def token_header(token), do: [{"Authorization", token}]
 
   defp add_json_headers(headers) do
     [{"Accept", "application/json"},
      {"Content-Type", "application/json"} | headers]
-  end
-
-  defp token do
-    Application.get_env(:discord_elixir, :token)
   end
 end
