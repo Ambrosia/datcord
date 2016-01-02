@@ -128,7 +128,6 @@ defmodule DiscordElixir.API.Channel do
   """
   def broadcast_typing(channel) do
     url = channel |> channel_url
-    API.post(url <> "/typing", :empty)
     with {:ok, _response} <- API.post(url <> "/typing", :empty),
          do: :ok
   end
