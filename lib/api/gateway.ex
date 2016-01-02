@@ -19,7 +19,7 @@ defmodule DiscordElixir.API.Gateway do
 
   ## Example
 
-      iex> DiscordElixir.API.Gateway.endpoint1
+      iex> DiscordElixir.API.Gateway.endpoint!
       "wss://gateway-fafnir.discord.gg"
   """
   def endpoint! do
