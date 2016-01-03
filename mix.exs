@@ -28,7 +28,8 @@ defmodule DiscordElixir.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:poison, "~> 1.5"},
-     {:socket, "~> 0.3.1"},
-     {:httpoison, "~> 0.8.0"}]
+     {:websocket_client, github: "jeremyong/websocket_client"},
+     {:httpoison, "~> 0.8.0"},
+     {:credo, "~> 0.2.5", only: [:dev, :test]}]
   end
 end
