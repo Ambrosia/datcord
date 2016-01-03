@@ -1,5 +1,6 @@
 defmodule DiscordElixir.API do
   use HTTPoison.Base
+  alias __MODULE__, as: API
 
   @endpoint "https://discordapp.com/api"
 
@@ -16,6 +17,15 @@ defmodule DiscordElixir.API do
   defp process_response_body(""), do: nil
   defp process_response_body(binary), do: Poison.decode!(binary)
 
+  @doc """
+  Returns a token header.
+
+  If `nil` is passed, this attempts to get the token from the
+  `DiscordElixir.API.Token` agent. This will fail if not used.
+
+  As this is already a list, it must be merged to be used with other headers.
+  """
+  def token_header(nil), do: API.Token.get |> token_header
   def token_header(token), do: [{"Authorization", token}]
 
   defp add_json_headers(headers) do

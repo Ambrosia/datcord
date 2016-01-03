@@ -1,4 +1,11 @@
 defmodule DiscordElixir.API.Channel do
+  @moduledoc """
+  Discord's Channel API.
+
+  If a token is stored using `DiscordElixir.API.Token`, all `token` arguments
+  are optional.
+  """
+
   defstruct guild_id: nil, id: nil, is_private: false,
   last_message_id: nil, name: nil, permission_overwrites: [], position: nil,
   topic: nil, type: nil
@@ -10,17 +17,17 @@ defmodule DiscordElixir.API.Channel do
   Creates a channel inside the given guild.
 
   `guild` can either be a `Guild` or guild id.
-  `token` is the API token to use.
   `params` is a map with the values of `name` and `type`. These are both required.
   `name` must be a string 2-100 characters long.
   `type` must either be `:text` or `:voice`.
+  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Channel.create(guild, token, %{name: "channel", type: :text})
+      iex> DiscordElixir.API.Channel.create(guild, %{name: "channel", type: :text})
       {:ok, DiscordElixir.API.Channel{...}}
   """
-  def create(guild, token, params) do
+  def create(guild, params, token \\ nil) do
     with :ok <- validate_create_params(params),
          url = API.Guild.guild_url(guild) <> "/channels",
          headers = API.token_header(token),
@@ -32,18 +39,18 @@ defmodule DiscordElixir.API.Channel do
   Creates a channel inside the given guild.
 
   `guild` can either be a `Guild` or guild id.
-  `token` is the API token to use.
   `params` is a map with the values of `name` and `type`.
   `name` must be a string 2-100 characters long.
   `type` must either be `:text` or `:voice`.
+  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Channel.create!(guild, token, %{name: "channel", type: :text})
+      iex> DiscordElixir.API.Channel.create!(guild, %{name: "channel", type: :text})
       DiscordElixir.API.Channel{...}
   """
-  def create!(guild, token, params) do
-    {:ok, channel} = create(guild, token, params)
+  def create!(guild, params, token \\ nil) do
+    {:ok, channel} = create(guild,  params, token)
     channel
   end
 
@@ -51,18 +58,18 @@ defmodule DiscordElixir.API.Channel do
   Edits a channel's settings.
 
   `channel` can either be a `Channel` struct or the channel's id (string).
-  `token` is the API token to use.
   `params` is a map with the values of `name`, `position` and `topic`. These params are only optional if a `Channel` struct is used.
   `name` is the channel name to change to. Must be a string 2-100 characters long.
   `position` is the position in the channel list to change to. Must be an int over -1.
   `topic` is the topic to use for the channel. Must be a string.
+  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Channel.edit(channel, token, %{name: "cool-kids"})
+      iex> DiscordElixir.API.Channel.edit(channel, %{name: "cool-kids"})
       {:ok, DiscordElixir.API.Channel{...}}
   """
-  def edit(channel, token, params) do
+  def edit(channel, params, token \\ nil) do
     headers = API.token_header(token)
     params = fill_edit_params(channel, params)
     with :ok <- validate_edit_params(params),
@@ -75,19 +82,19 @@ defmodule DiscordElixir.API.Channel do
   Edits a channel's settings.
 
   `channel` can either be a `Channel` struct or the channel's id (string).
-  `token` is the API token to use.
   `params` is a map with the values of `name`, `position` and `topic`. These params are only optional if a `Channel` struct is used.
   `name` is the channel name to change to. Must be a string 2-100 characters long.
   `position` is the position in the channel list to change to. Must be an int over -1.
   `topic` is the topic to use for the channel. Must be a string.
+  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Channel.edit!(channel, token, %{name: "cool-kids"})
+      iex> DiscordElixir.API.Channel.edit!(channel, %{name: "cool-kids"})
       DiscordElixir.API.Channel{...}
   """
-  def edit!(channel, token, params) do
-    {:ok, channel} = edit(channel, token, params)
+  def edit!(channel, params, token \\ nil) do
+    {:ok, channel} = edit(channel, params, token)
     channel
   end
 
@@ -95,14 +102,14 @@ defmodule DiscordElixir.API.Channel do
   Deletes a channel.
 
   `channel` can either be a `Channel` struct or the channel's id (string).
-  `token` is the API token to use.
+  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Channel.delete(channel, token)
+      iex> DiscordElixir.API.Channel.delete(channel)
       {:ok, DiscordElixir.API.Channel{...}}
   """
-  def delete(channel, token) do
+  def delete(channel, token \\ nil) do
     url = channel |> channel_url
     headers = API.token_header(token)
     with {:ok, response} <- API.delete(url, headers),
@@ -113,14 +120,14 @@ defmodule DiscordElixir.API.Channel do
   Deletes a channel.
 
   `channel` can either be a `Channel` struct or the channel's id (string).
-  `token` is the API token to use.
+  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Channel.delete!(channel, token)
+      iex> DiscordElixir.API.Channel.delete!(channel)
       DiscordElixir.API.Channel{...}
   """
-  def delete!(channel, token) do
+  def delete!(channel, token \\ nil) do
     {:ok, channel} = delete(channel, token)
     channel
   end
@@ -131,14 +138,14 @@ defmodule DiscordElixir.API.Channel do
   The typing notification lasts for 5 seconds.
 
   `channel` can either be a `Channel` struct or the channel's id (string).
-  `token` is the API token to use.
+  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Channel.broadcast_typing(channel, token)
+      iex> DiscordElixir.API.Channel.broadcast_typing(channel)
       :ok
   """
-  def broadcast_typing(channel, token) do
+  def broadcast_typing(channel, token \\ nil) do
     url = channel |> channel_url
     headers = API.token_header(token)
     with {:ok, _response} <- API.post(url <> "/typing", :empty, headers),
