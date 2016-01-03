@@ -129,8 +129,8 @@ defmodule DiscordElixir.API.Guild do
   def guilds(token \\ nil) do
     headers = API.token_header(token)
     with {:ok, response} <- API.get("/users/@me/guilds", headers),
-         guilds = Enum.map(response.body, &parse/1),
-         do: {:ok, guilds}
+         user_guilds = Enum.map(response.body, &parse/1),
+         do: {:ok, user_guilds}
   end
 
   @doc """
@@ -144,8 +144,8 @@ defmodule DiscordElixir.API.Guild do
       [DiscordElixir.API.Guild{...}, ...]
   """
   def guilds!(token \\ nil) do
-    {:ok, guilds} = guilds(token)
-    guilds
+    {:ok, user_guilds} = guilds(token)
+    user_guilds
   end
 
   def guild_url, do: "/guilds"

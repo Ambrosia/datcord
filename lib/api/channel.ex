@@ -157,9 +157,10 @@ defmodule DiscordElixir.API.Channel do
   def channel_url(channel_id), do: channel_url <> "/" <> to_string(channel_id)
 
   defp validate_channel_name(name) do
-    case Regex.match?(~r/^[a-z0-9\-]{2,100}$/i, name) do
-      true -> :ok
-      false -> {:error, :invalid_channel_name}
+    if Regex.match?(~r/^[a-z0-9\-]{2,100}$/i, name) do
+      :ok
+    else
+      {:error, :invalid_channel_name}
     end
   end
 

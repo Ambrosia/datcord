@@ -1,4 +1,12 @@
 defmodule DiscordElixir.API do
+  @moduledoc """
+  HTTPoison.Base wrapper.
+
+  See HTTPoison docs at http://hexdocs.pm/httpoison/HTTPoison.html
+  This module adds the required json headers, encodes request bodies and
+  decodes response bodies.
+  """
+
   use HTTPoison.Base
   alias __MODULE__, as: API
 
