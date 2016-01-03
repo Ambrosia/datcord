@@ -2,7 +2,7 @@ defmodule DiscordElixir.API.Gateway do
   @moduledoc """
   Discord's Gateway API.
 
-  If a token is stored using `DiscordElixir.API.Token`, all `token` arguments
+  If a token is stored using `API.Token`, all `token` arguments
   are optional.
   """
 
@@ -11,11 +11,12 @@ defmodule DiscordElixir.API.Gateway do
   @doc """
   Gets the WebSocket endpoint.
 
-  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
+  - `token` is the API token to use.
+    This is optional if `API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Gateway.endpoint
+      iex> API.Gateway.endpoint
       {:ok, "wss://gateway-fafnir.discord.gg"}
   """
   def endpoint(token \\ nil) do
@@ -27,11 +28,12 @@ defmodule DiscordElixir.API.Gateway do
   @doc """
   Gets the WebSocket endpoint.
 
-  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
+  - `token` is the API token to use.
+    This is optional if `API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Gateway.endpoint!
+      iex> API.Gateway.endpoint!
       "wss://gateway-fafnir.discord.gg"
   """
   def endpoint!(token \\ nil) do

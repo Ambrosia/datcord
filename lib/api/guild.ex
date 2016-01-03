@@ -4,7 +4,7 @@ defmodule DiscordElixir.API.Guild do
 
   Guilds are referred to as servers everywhere else.
 
-  If a token is stored using `DiscordElixir.API.Token`, all `token` arguments
+  If a token is stored using `API.Token`, all `token` arguments
   are optional.
   """
 
@@ -18,12 +18,13 @@ defmodule DiscordElixir.API.Guild do
   @doc """
   Creates a guild using the given name.
 
-  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
+  - `token` is the API token to use.
+    This is optional if `API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Guild.create("Nice server")
-      {:ok, DiscordElixir.API.Guild{...}}
+      iex> API.Guild.create("Nice server")
+      {:ok, API.Guild{...}}
   """
   def create(name, token \\ nil) when is_binary(name) do
     with :ok <- validate_name_length(name),
@@ -35,12 +36,13 @@ defmodule DiscordElixir.API.Guild do
   @doc """
   Creates a guild using the given name.
 
-  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
+  - `token` is the API token to use.
+    This is optional if `API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Guild.create!("Nice server")
-      DiscordElixir.API.Guild{...}
+      iex> API.Guild.create!("Nice server")
+      API.Guild{...}
   """
   def create!(name, token \\ nil) do
     {:ok, guild} = create(name, token)
@@ -50,13 +52,14 @@ defmodule DiscordElixir.API.Guild do
   @doc """
   Changes the given guild's name.
 
-  `guild` can either be a `Guild` struct or the guild's id (string).
-  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
+  - `guild` can either be a `Guild` struct or the guild's id (string).
+  - `token` is the API token to use.
+    This is optional if `API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Guild.edit("123", "New name")
-      {:ok, DiscordElixir.API.Guild{...}}
+      iex> API.Guild.edit("123", "New name")
+      {:ok, API.Guild{...}}
   """
   def edit(guild, name, token \\ nil) when is_binary(name) do
     with :ok <- validate_name_length(name),
@@ -69,13 +72,14 @@ defmodule DiscordElixir.API.Guild do
   @doc """
   Changes the given guild's name.
 
-  `guild` can either be a `Guild` struct or the guild's id (string).
-  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
+  - `guild` can either be a `Guild` struct or the guild's id (string).
+  - `token` is the API token to use.
+    This is optional if `API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Guild.edit!("123", "New name")
-      DiscordElixir.API.Guild{...}
+      iex> API.Guild.edit!("123", "New name")
+      API.Guild{...}
   """
   def edit!(guild, name, token \\ nil) when is_binary(name) do
     {:ok, guild} = edit(guild, name, token)
@@ -85,13 +89,14 @@ defmodule DiscordElixir.API.Guild do
   @doc """
   Deletes the given guild.
 
-  `guild` can either be a `Guild` struct or the guild's id (string).
-  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
+  - `guild` can either be a `Guild` struct or the guild's id (string).
+  - `token` is the API token to use.
+    This is optional if `API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Guild.delete("123")
-      {:ok, DiscordElixir.API.Guild{...}}
+      iex> API.Guild.delete("123")
+      {:ok, API.Guild{...}}
   """
   def delete(guild, token \\ nil) do
     with url = guild |> guild_url,
@@ -103,13 +108,14 @@ defmodule DiscordElixir.API.Guild do
   @doc """
   Deletes the given guild.
 
-  `guild` can either be a `Guild` struct or the guild's id (string).
-  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
+  - `guild` can either be a `Guild` struct or the guild's id (string).
+  - `token` is the API token to use.
+    This is optional if `API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Guild.delete!("123")
-      DiscordElixir.API.Guild{...}
+      iex> API.Guild.delete!("123")
+      API.Guild{...}
   """
   def delete!(guild, token \\ nil) do
     {:ok, guild} = delete(guild, token)
@@ -119,12 +125,13 @@ defmodule DiscordElixir.API.Guild do
   @doc """
   Gets all guilds this user is currently in.
 
-  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
+  - `token` is the API token to use.
+    This is optional if `API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Guild.guilds
-      {:ok, [DiscordElixir.API.Guild{...}, ...]}
+      iex> API.Guild.guilds
+      {:ok, [API.Guild{...}, ...]}
   """
   def guilds(token \\ nil) do
     headers = API.token_header(token)
@@ -136,12 +143,13 @@ defmodule DiscordElixir.API.Guild do
   @doc """
   Gets all guilds this user is currently in.
 
-  `token` is the API token to use. This is optional if `DiscordElixir.API.Token` is used.
+  - `token` is the API token to use.
+    This is optional if `API.Token` is used.
 
   ## Example
 
-      iex> DiscordElixir.API.Guild.guilds!
-      [DiscordElixir.API.Guild{...}, ...]
+      iex> API.Guild.guilds!
+      [API.Guild{...}, ...]
   """
   def guilds!(token \\ nil) do
     {:ok, user_guilds} = guilds(token)
