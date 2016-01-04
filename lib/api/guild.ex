@@ -27,8 +27,9 @@ defmodule DiscordElixir.API.Guild do
       {:ok, API.Guild{...}}
   """
   def create(name, token \\ nil) when is_binary(name) do
+    headers = API.token_header(token)
+
     with :ok <- validate_name_length(name),
-         headers = API.token_header(token),
          {:ok, response} <- API.post(guild_url, %{name: name}, headers),
          do: {:ok, parse(response.body)}
   end
@@ -45,8 +46,11 @@ defmodule DiscordElixir.API.Guild do
       API.Guild{...}
   """
   def create!(name, token \\ nil) do
-    {:ok, guild} = create(name, token)
-    guild
+    case create(name, token) do
+      {:ok, guild} -> guild
+      {:error, error = %HTTPoison.Error{}} -> raise error
+      {:error, error} -> raise ArgumentError, Atom.to_string(error)
+    end
   end
 
   @doc """
@@ -62,9 +66,10 @@ defmodule DiscordElixir.API.Guild do
       {:ok, API.Guild{...}}
   """
   def edit(guild, name, token \\ nil) when is_binary(name) do
+    url = guild |> guild_url
+    headers = API.token_header(token)
+
     with :ok <- validate_name_length(name),
-         headers = API.token_header(token),
-         url = guild |> guild_url,
          {:ok, response} <- API.patch(url, %{name: name}, headers),
          do: {:ok, parse(response.body)}
   end
@@ -82,8 +87,11 @@ defmodule DiscordElixir.API.Guild do
       API.Guild{...}
   """
   def edit!(guild, name, token \\ nil) when is_binary(name) do
-    {:ok, guild} = edit(guild, name, token)
-    guild
+    case edit(guild, name, token) do
+      {:ok, guild} -> guild
+      {:error, error = %HTTPoison.Error{}} -> raise error
+      {:error, error} -> raise ArgumentError, Atom.to_string(error)
+    end
   end
 
   @doc """
@@ -99,9 +107,10 @@ defmodule DiscordElixir.API.Guild do
       {:ok, API.Guild{...}}
   """
   def delete(guild, token \\ nil) do
-    with url = guild |> guild_url,
-         headers = API.token_header(token),
-         {:ok, response} <- API.delete(url, headers),
+    url = guild |> guild_url
+    headers = API.token_header(token)
+
+    with {:ok, response} <- API.delete(url, headers),
          do: {:ok, parse(response.body)}
   end
 
@@ -118,8 +127,11 @@ defmodule DiscordElixir.API.Guild do
       API.Guild{...}
   """
   def delete!(guild, token \\ nil) do
-    {:ok, guild} = delete(guild, token)
-    guild
+    case delete(guild, token) do
+      {:ok, guild} -> guild
+      {:error, error = %HTTPoison.Error{}} -> raise error
+      {:error, error} -> raise ArgumentError, Atom.to_string(error)
+    end
   end
 
   @doc """
@@ -135,6 +147,7 @@ defmodule DiscordElixir.API.Guild do
   """
   def guilds(token \\ nil) do
     headers = API.token_header(token)
+
     with {:ok, response} <- API.get("/users/@me/guilds", headers),
          user_guilds = Enum.map(response.body, &parse/1),
          do: {:ok, user_guilds}
@@ -152,8 +165,11 @@ defmodule DiscordElixir.API.Guild do
       [API.Guild{...}, ...]
   """
   def guilds!(token \\ nil) do
-    {:ok, user_guilds} = guilds(token)
-    user_guilds
+    case guilds(token) do
+      {:ok, user_guilds} -> user_guilds
+      {:error, error = %HTTPoison.Error{}} -> raise Error
+      {:error, error} -> raise ArgumentError, Atom.to_string(error)
+    end
   end
 
   def guild_url, do: "/guilds"

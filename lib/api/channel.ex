@@ -11,6 +11,7 @@ defmodule DiscordElixir.API.Channel do
   topic: nil, type: nil
 
   alias DiscordElixir.API
+  alias DiscordElixir.API.{Guild, Token}
   alias __MODULE__, as: Channel
 
   @doc """
@@ -21,6 +22,7 @@ defmodule DiscordElixir.API.Channel do
     These are both required.
     - `name` must be a string 2-100 characters long.
     - `type` must either be `:text` or `:voice`.
+      This is optional.
   - `token` is the API token to use. This is optional if `API.Token` is used.
 
   ## Example
@@ -29,9 +31,14 @@ defmodule DiscordElixir.API.Channel do
       {:ok, API.Channel{...}}
   """
   def create(guild, params, token \\ nil) do
-    with :ok <- validate_create_params(params),
-         url = API.Guild.guild_url(guild) <> "/channels",
-         headers = API.token_header(token),
+    name = Map.get(params, :name)
+    type = Map.get(params, :type, :text)
+
+    url = Guild.guild_url(guild) <> "/channels"
+    headers = API.token_header(token)
+
+    with :ok <- validate_channel_name(name),
+         :ok <- validate_channel_type(type),
          {:ok, response} <- API.post(url, params, headers),
          do: {:ok, parse(response.body)}
   end
@@ -52,8 +59,11 @@ defmodule DiscordElixir.API.Channel do
       API.Channel{...}
   """
   def create!(guild, params, token \\ nil) do
-    {:ok, channel} = create(guild,  params, token)
-    channel
+    case create(guild, params, token) do
+      {:ok, channel} -> channel
+      {:error, error = %HTTPoison.Error{}} -> raise error
+      {:error, error} -> raise ArgumentError, Atom.to_string(error)
+    end
   end
 
   @doc """
@@ -74,11 +84,22 @@ defmodule DiscordElixir.API.Channel do
       iex> API.Channel.edit(channel, %{name: "cool-kids"})
       {:ok, API.Channel{...}}
   """
-  def edit(channel, params, token \\ nil) do
+  def edit(channel, params, token \\ nil)
+  def edit(channel = %Channel{}, params, token) do
+    params = params
+    |> Map.put_new(:name, channel.name)
+    |> Map.put_new(:position, channel.position)
+    |> Map.put_new(:topic, channel.topic)
+
+    edit(channel, params, token)
+  end
+
+  def edit(channel, params, token) do
+    url = channel |> channel_url
     headers = API.token_header(token)
-    params = fill_edit_params(channel, params)
-    with :ok <- validate_edit_params(params),
-         url = channel |> channel_url,
+
+    with :ok <- validate_channel_name(params.name),
+         :ok <- validate_channel_position(params.position),
          {:ok, response} <- API.patch(url, params, headers),
          do: {:ok, parse(response.body)}
   end
@@ -102,8 +123,11 @@ defmodule DiscordElixir.API.Channel do
       API.Channel{...}
   """
   def edit!(channel, params, token \\ nil) do
-    {:ok, channel} = edit(channel, params, token)
-    channel
+    case edit(channel, params, token) do
+      {:ok, channel} -> channel
+      {:error, error = %HTTPoison.Error{}} -> raise error
+      {:error, error} -> raise ArgumentError, Atom.to_string(error)
+    end
   end
 
   @doc """
@@ -120,6 +144,7 @@ defmodule DiscordElixir.API.Channel do
   def delete(channel, token \\ nil) do
     url = channel |> channel_url
     headers = API.token_header(token)
+
     with {:ok, response} <- API.delete(url, headers),
          do: {:ok, parse(response.body)}
   end
@@ -136,8 +161,11 @@ defmodule DiscordElixir.API.Channel do
       API.Channel{...}
   """
   def delete!(channel, token \\ nil) do
-    {:ok, channel} = delete(channel, token)
-    channel
+    case delete(channel, token) do
+      {:ok, channel} -> channel
+      {:error, error = %HTTPoison.Error{}} -> raise error
+      {:error, error} -> raise ArgumentError, Atom.to_string(error)
+    end
   end
 
   @doc """
@@ -156,8 +184,11 @@ defmodule DiscordElixir.API.Channel do
   def broadcast_typing(channel, token \\ nil) do
     url = channel |> channel_url
     headers = API.token_header(token)
-    with {:ok, _response} <- API.post(url <> "/typing", :empty, headers),
-         do: :ok
+
+    case API.post(url <> "/typing", :empty, headers) do
+      {:ok, _response} -> :ok
+      {:error, error} -> {:error, error}
+    end
   end
 
   def channel_url, do: "/channels"
@@ -177,27 +208,6 @@ defmodule DiscordElixir.API.Channel do
 
   defp validate_channel_position(pos) when is_integer(pos) and pos >= -1, do: :ok
   defp validate_channel_position(_pos), do: {:error, :invalid_channel_position}
-
-  defp validate_create_params(params) do
-    with :ok <- validate_channel_name(params.name),
-         :ok <- validate_channel_type(params.type),
-         do: :ok
-  end
-
-  defp validate_edit_params(params) do
-    with :ok <- validate_channel_name(params.name),
-         :ok <- validate_channel_position(params.position),
-         do: :ok
-  end
-
-  defp fill_edit_params(channel = %Channel{}, params) do
-    params
-    |> Map.put_new(:name, channel.name)
-    |> Map.put_new(:position, channel.position)
-    |> Map.put_new(:topic, channel.topic)
-  end
-
-  defp fill_edit_params(_channel, params), do: params
 
   def parse(channel) do
     channel = for {key, val} <- channel, into: %{} do
