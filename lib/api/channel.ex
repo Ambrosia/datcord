@@ -185,7 +185,7 @@ defmodule DiscordElixir.API.Channel do
     url = channel |> channel_url
     headers = API.token_header(token)
 
-    case API.post(url <> "/typing", :empty, headers) do
+    case API.post(url <> "/typing", %{}, headers) do
       {:ok, _response} -> :ok
       {:error, error} -> {:error, error}
     end

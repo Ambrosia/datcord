@@ -19,7 +19,7 @@ defmodule DiscordElixir.API do
     |> add_json_headers
   end
 
-  defp process_request_body(:empty), do: ""
+  defp process_request_body(map) when map == %{}, do: ""
   defp process_request_body(map), do: Poison.encode!(map)
 
   defp process_response_body(""), do: nil
