@@ -37,7 +37,9 @@ defmodule DiscordElixir.API.Gateway do
       "wss://gateway-fafnir.discord.gg"
   """
   def endpoint!(token \\ nil) do
-    headers = API.token_header(token)
-    API.get!("/gateway", headers).body["url"]
+    case endpoint(token) do
+      {:ok, url} -> url
+      {:error, error = %HTTPoison.Error{}} -> raise error
+    end
   end
 end
