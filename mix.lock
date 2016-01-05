@@ -1,6 +1,8 @@
 %{"bunt": {:hex, :bunt, "0.1.4"},
   "certifi": {:hex, :certifi, "0.3.0"},
   "credo": {:hex, :credo, "0.2.5"},
+  "dialyxir": {:hex, :dialyxir, "0.3.1"},
+  "dialyze": {:hex, :dialyze, "0.2.0"},
   "hackney": {:hex, :hackney, "1.4.7"},
   "httpoison": {:hex, :httpoison, "0.8.0"},
   "idna": {:hex, :idna, "1.0.2"},

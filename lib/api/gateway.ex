@@ -7,6 +7,7 @@ defmodule DiscordElixir.API.Gateway do
   """
 
   alias DiscordElixir.API
+  alias DiscordElixir.API.Token
 
   @doc """
   Gets the WebSocket endpoint.
@@ -19,6 +20,8 @@ defmodule DiscordElixir.API.Gateway do
       iex> API.Gateway.endpoint
       {:ok, "wss://gateway-fafnir.discord.gg"}
   """
+  @spec endpoint(Token.maybe) :: {:ok, String.t}
+                               | {:error, HTTPoison.Error.t}
   def endpoint(token \\ nil) do
     headers = API.token_header(token)
     with {:ok, response} <- API.get("/gateway", headers),
@@ -36,6 +39,7 @@ defmodule DiscordElixir.API.Gateway do
       iex> API.Gateway.endpoint!
       "wss://gateway-fafnir.discord.gg"
   """
+  @spec endpoint!(Token.maybe) :: String.t | no_return
   def endpoint!(token \\ nil) do
     case endpoint(token) do
       {:ok, url} -> url

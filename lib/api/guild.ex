@@ -8,11 +8,17 @@ defmodule DiscordElixir.API.Guild do
   are optional.
   """
 
+  @typedoc """
+  Guild struct or channel id.
+  """
+  @type t :: String.t | %__MODULE__{}
+
   defstruct afk_channel_id: nil, afk_timeout: 300, embed_channel_id: nil,
   embed_enabled: false, emojis: [], features: [], icon: nil, id: nil,
   joined_at: nil, name: nil, owner_id: nil, region: nil, roles: [], splash: nil
 
   alias DiscordElixir.API
+  alias DiscordElixir.API.Token
   alias __MODULE__, as: Guild
 
   @doc """
@@ -26,6 +32,7 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.create("Nice server")
       {:ok, API.Guild{...}}
   """
+  @spec create(String.t, Token.maybe) :: API.maybe(Guild.t)
   def create(name, token \\ nil) when is_binary(name) do
     headers = API.token_header(token)
 
@@ -37,6 +44,7 @@ defmodule DiscordElixir.API.Guild do
   @doc """
   Creates a guild using the given name.
 
+  - `name` is the name to use for the guild.
   - `token` is the API token to use.
     This is optional if `API.Token` is used.
 
@@ -45,6 +53,7 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.create!("Nice server")
       API.Guild{...}
   """
+  @spec create!(String.t, Token.maybe) :: Guild.t | no_return
   def create!(name, token \\ nil) do
     case create(name, token) do
       {:ok, guild} -> guild
@@ -57,6 +66,7 @@ defmodule DiscordElixir.API.Guild do
   Changes the given guild's name.
 
   - `guild` can either be a `Guild` struct or the guild's id (string).
+  - `name` is the guild's new name.
   - `token` is the API token to use.
     This is optional if `API.Token` is used.
 
@@ -65,6 +75,7 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.edit("123", "New name")
       {:ok, API.Guild{...}}
   """
+  @spec edit(Guild.t, String.t, Token.maybe) :: API.maybe(Guild.t)
   def edit(guild, name, token \\ nil) when is_binary(name) do
     url = guild |> guild_url
     headers = API.token_header(token)
@@ -86,6 +97,7 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.edit!("123", "New name")
       API.Guild{...}
   """
+  @spec edit!(Guild.t, String.t, Token.maybe) :: Guild.t | no_return
   def edit!(guild, name, token \\ nil) when is_binary(name) do
     case edit(guild, name, token) do
       {:ok, guild} -> guild
@@ -106,6 +118,7 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.delete("123")
       {:ok, API.Guild{...}}
   """
+  @spec delete(Guild.t, Token.maybe) :: API.maybe(Guild.t)
   def delete(guild, token \\ nil) do
     url = guild |> guild_url
     headers = API.token_header(token)
@@ -126,6 +139,7 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.delete!("123")
       API.Guild{...}
   """
+  @spec delete!(Guild.t, Token.maybe) :: Guild.t | no_return
   def delete!(guild, token \\ nil) do
     case delete(guild, token) do
       {:ok, guild} -> guild
@@ -145,6 +159,7 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.guilds
       {:ok, [API.Guild{...}, ...]}
   """
+  @spec guilds(Token.maybe) :: API.maybe([Guild.t])
   def guilds(token \\ nil) do
     headers = API.token_header(token)
 
@@ -164,6 +179,7 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.guilds!
       [API.Guild{...}, ...]
   """
+  @spec guilds!(Token.maybe) :: [Guild.t] | no_return
   def guilds!(token \\ nil) do
     case guilds(token) do
       {:ok, user_guilds} -> user_guilds
@@ -172,10 +188,13 @@ defmodule DiscordElixir.API.Guild do
     end
   end
 
+  @spec guild_url :: String.t
+  @spec guild_url(t) :: String.t
   def guild_url, do: "/guilds"
   def guild_url(%Guild{id: id}), do: guild_url(id)
   def guild_url(guild_id), do: guild_url <> "/" <> to_string(guild_id)
 
+  @spec validate_name_length(String.t) :: :ok | {:error, :too_short | :too_long}
   defp validate_name_length(name) do
     case String.length(name) do
       x when x < 2 -> {:error, :too_short}
@@ -184,6 +203,7 @@ defmodule DiscordElixir.API.Guild do
     end
   end
 
+  @spec parse(map) :: %Guild{}
   def parse(guild) do
     guild = for {key, val} <- guild, into: %{} do
       {String.to_existing_atom(key), val}
