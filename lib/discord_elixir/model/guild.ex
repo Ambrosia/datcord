@@ -3,22 +3,14 @@ defmodule DiscordElixir.Model.Guild do
   id: nil, icon: nil, name: nil, roles: [], region: nil, embed_channel_id: nil,
   embed_enabled: nil, splash: nil, emojis: [], owner_id: nil
 
+  alias DiscordElixir.Model
   alias __MODULE__, as: Guild
 
   @type t :: %Guild{}
 
-  @spec parse([map]) :: [t]
-  def parse(maps) when is_list(maps) do
-    Enum.map(maps, &parse/1)
-  end
-
-  @spec parse(map) :: t
+  @spec parse(map | [map]) :: t | [t]
   def parse(map) do
-    map = for {k, v} <- map, into: %{} do
-      {String.to_existing_atom(k), v}
-    end
-
-    struct(Guild, map)
+    Model.parse(map, Guild)
   end
 
   @spec url :: String.t
