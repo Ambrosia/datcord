@@ -9,14 +9,11 @@ defmodule DiscordElixir.API.Channel do
   @typedoc """
   Channel struct or channel id.
   """
-  @type t :: String.t | %__MODULE__{}
-
-  defstruct guild_id: nil, id: nil, is_private: false,
-  last_message_id: nil, name: nil, permission_overwrites: [], position: nil,
-  topic: nil, type: nil
+  @type channel :: String.t | Model.Channel.t
 
   alias DiscordElixir.API
   alias DiscordElixir.API.{Guild, Token}
+  alias DiscordElixir.Model
   alias __MODULE__, as: Channel
 
   @type create_params :: %{name: String.t, type: :text | :voice}
@@ -35,20 +32,20 @@ defmodule DiscordElixir.API.Channel do
   ## Example
 
       iex> API.Channel.create(guild, %{name: "channel", type: :text})
-      {:ok, API.Channel{...}}
+      {:ok, %Model.Channel{...}}
   """
-  @spec create(Guild.t, create_params, Token.maybe) :: API.maybe(Channel.t)
+  @spec create(Model.Guild.t, create_params, Token.maybe) :: API.maybe(Model.Channel.t)
   def create(guild, params, token \\ nil) do
     name = Map.get(params, :name)
     type = Map.get(params, :type, :text)
 
-    url = Guild.guild_url(guild) <> "/channels"
+    url = Model.Guild.url(guild) <> "/channels"
     headers = API.token_header(token)
 
     with :ok <- validate_channel_name(name),
          :ok <- validate_channel_type(type),
          {:ok, response} <- API.post(url, params, headers),
-         do: {:ok, parse(response.body)}
+         do: {:ok, Model.Channel.parse(response.body)}
   end
 
   @doc """
@@ -64,9 +61,9 @@ defmodule DiscordElixir.API.Channel do
   ## Example
 
       iex> API.Channel.create!(guild, %{name: "channel", type: :text})
-      API.Channel{...}
+      %Model.Channel{...}
   """
-  @spec create!(Guild.t, create_params, Token.maybe) :: Channel.t | no_return
+  @spec create!(Model.Guild.t, create_params, Token.maybe) :: Model.Channel.t | no_return
   def create!(guild, params, token \\ nil) do
     case create(guild, params, token) do
       {:ok, channel} -> channel
@@ -93,11 +90,11 @@ defmodule DiscordElixir.API.Channel do
   ## Example
 
       iex> API.Channel.edit(channel, %{name: "cool-kids"})
-      {:ok, API.Channel{...}}
+      {:ok, %Model.Channel{...}}
   """
-  @spec edit(Channel.t, edit_params, Token.maybe) :: API.maybe(Channel.t)
+  @spec edit(channel, edit_params, Token.maybe) :: API.maybe(Model.Channel.t)
   def edit(channel, params, token \\ nil)
-  def edit(channel = %Channel{}, params, token) do
+  def edit(channel = %Model.Channel{}, params, token) do
     params = params
     |> Map.put_new(:name, channel.name)
     |> Map.put_new(:position, channel.position)
@@ -107,13 +104,13 @@ defmodule DiscordElixir.API.Channel do
   end
 
   def edit(channel, params, token) do
-    url = channel |> channel_url
+    url = Model.Channel.url(channel)
     headers = API.token_header(token)
 
     with :ok <- validate_channel_name(params.name),
          :ok <- validate_channel_position(params.position),
          {:ok, response} <- API.patch(url, params, headers),
-         do: {:ok, parse(response.body)}
+         do: {:ok, Model.Channel.parse(response.body)}
   end
 
   @doc """
@@ -132,9 +129,9 @@ defmodule DiscordElixir.API.Channel do
   ## Example
 
       iex> API.Channel.edit!(channel, %{name: "cool-kids"})
-      API.Channel{...}
+      %Model.Channel{...}
   """
-  @spec edit!(Channel.t, edit_params, Token.maybe) :: Channel.t
+  @spec edit!(Model.Channel.t, edit_params, Token.maybe) :: Model.Channel.t | no_return
   def edit!(channel, params, token \\ nil) do
     case edit(channel, params, token) do
       {:ok, channel} -> channel
@@ -152,15 +149,15 @@ defmodule DiscordElixir.API.Channel do
   ## Example
 
       iex> API.Channel.delete(channel)
-      {:ok, API.Channel{...}}
+      {:ok, %Model.Channel{...}}
   """
-  @spec delete(Channel.t, Token.maybe) :: API.maybe(Channel.t)
+  @spec delete(Model.Channel.t, Token.maybe) :: API.maybe(Model.Channel.t)
   def delete(channel, token \\ nil) do
-    url = channel |> channel_url
+    url = Model.Channel.url(channel)
     headers = API.token_header(token)
 
     with {:ok, response} <- API.delete(url, headers),
-         do: {:ok, parse(response.body)}
+         do: {:ok, Model.Channel.parse(response.body)}
   end
 
   @doc """
@@ -174,7 +171,7 @@ defmodule DiscordElixir.API.Channel do
       iex> API.Channel.delete!(channel)
       API.Channel{...}
   """
-  @spec delete!(Channel.t, Token.maybe) :: Channel.t
+  @spec delete!(Model.Channel.t, Token.maybe) :: Model.Channel.t | no_return
   def delete!(channel, token \\ nil) do
     case delete(channel, token) do
       {:ok, channel} -> channel
@@ -196,22 +193,17 @@ defmodule DiscordElixir.API.Channel do
       iex> API.Channel.broadcast_typing(channel)
       :ok
   """
-  @spec broadcast_typing(Channel.t, Token.maybe) :: :ok | {:error, any}
+  @spec broadcast_typing(Model.Channel.t, Token.maybe) :: :ok | {:error, any}
   def broadcast_typing(channel, token \\ nil) do
-    url = channel |> channel_url
+    url = Model.Channel.url(channel) <> "/typing"
     headers = API.token_header(token)
 
-    case API.post(url <> "/typing", %{}, headers) do
+    case API.post(url, %{}, headers) do
       {:ok, _response} -> :ok
       {:error, error} -> {:error, error}
     end
   end
 
-  @spec channel_url :: String.t
-  @spec channel_url(t) :: String.t
-  def channel_url, do: "/channels"
-  def channel_url(%Channel{id: id}), do: channel_url(id)
-  def channel_url(channel_id), do: channel_url <> "/" <> to_string(channel_id)
 
   @spec validate_channel_name(String.t) :: :ok | {:error, :invalid_channel_name}
   defp validate_channel_name(name) do
@@ -230,12 +222,4 @@ defmodule DiscordElixir.API.Channel do
                                         | {:error, :invalid_channel_position}
   defp validate_channel_position(pos) when is_integer(pos) and pos >= -1, do: :ok
   defp validate_channel_position(_pos), do: {:error, :invalid_channel_position}
-
-  @spec parse(map) :: %Channel{}
-  def parse(channel) do
-    channel = for {key, val} <- channel, into: %{} do
-      {String.to_existing_atom(key), val}
-    end
-    Map.put_new(channel, :__struct__, Channel)
-  end
 end

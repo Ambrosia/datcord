@@ -11,14 +11,11 @@ defmodule DiscordElixir.API.Guild do
   @typedoc """
   Guild struct or channel id.
   """
-  @type t :: String.t | %__MODULE__{}
-
-  defstruct afk_channel_id: nil, afk_timeout: 300, embed_channel_id: nil,
-  embed_enabled: false, emojis: [], features: [], icon: nil, id: nil,
-  joined_at: nil, name: nil, owner_id: nil, region: nil, roles: [], splash: nil
+  @type guild :: String.t | Model.Guild.t
 
   alias DiscordElixir.API
   alias DiscordElixir.API.Token
+  alias DiscordElixir.Model
   alias __MODULE__, as: Guild
 
   @doc """
@@ -30,15 +27,15 @@ defmodule DiscordElixir.API.Guild do
   ## Example
 
       iex> API.Guild.create("Nice server")
-      {:ok, API.Guild{...}}
+      {:ok, %Model.Guild{...}}
   """
-  @spec create(String.t, Token.maybe) :: API.maybe(Guild.t)
+  @spec create(String.t, Token.maybe) :: API.maybe(Model.Guild.t)
   def create(name, token \\ nil) when is_binary(name) do
     headers = API.token_header(token)
 
     with :ok <- validate_name_length(name),
-         {:ok, response} <- API.post(guild_url, %{name: name}, headers),
-         do: {:ok, parse(response.body)}
+         {:ok, response} <- API.post(Model.Guild.url, %{name: name}, headers),
+         do: {:ok, Model.Guild.parse(response.body)}
   end
 
   @doc """
@@ -51,9 +48,9 @@ defmodule DiscordElixir.API.Guild do
   ## Example
 
       iex> API.Guild.create!("Nice server")
-      API.Guild{...}
+      %Model.Guild{...}
   """
-  @spec create!(String.t, Token.maybe) :: Guild.t | no_return
+  @spec create!(String.t, Token.maybe) :: Model.Guild.t | no_return
   def create!(name, token \\ nil) do
     case create(name, token) do
       {:ok, guild} -> guild
@@ -73,16 +70,16 @@ defmodule DiscordElixir.API.Guild do
   ## Example
 
       iex> API.Guild.edit("123", "New name")
-      {:ok, API.Guild{...}}
+      {:ok, %Model.Guild{...}}
   """
-  @spec edit(Guild.t, String.t, Token.maybe) :: API.maybe(Guild.t)
+  @spec edit(guild, String.t, Token.maybe) :: API.maybe(Model.Guild.t)
   def edit(guild, name, token \\ nil) when is_binary(name) do
-    url = guild |> guild_url
+    url = Model.Guild.url(guild)
     headers = API.token_header(token)
 
     with :ok <- validate_name_length(name),
          {:ok, response} <- API.patch(url, %{name: name}, headers),
-         do: {:ok, parse(response.body)}
+         do: {:ok, Model.Guild.parse(response.body)}
   end
 
   @doc """
@@ -95,9 +92,9 @@ defmodule DiscordElixir.API.Guild do
   ## Example
 
       iex> API.Guild.edit!("123", "New name")
-      API.Guild{...}
+      %Model.Guild{...}
   """
-  @spec edit!(Guild.t, String.t, Token.maybe) :: Guild.t | no_return
+  @spec edit!(guild, String.t, Token.maybe) :: Model.Guild.t | no_return
   def edit!(guild, name, token \\ nil) when is_binary(name) do
     case edit(guild, name, token) do
       {:ok, guild} -> guild
@@ -118,13 +115,13 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.delete("123")
       {:ok, API.Guild{...}}
   """
-  @spec delete(Guild.t, Token.maybe) :: API.maybe(Guild.t)
+  @spec delete(guild, Token.maybe) :: API.maybe(Model.Guild.t)
   def delete(guild, token \\ nil) do
-    url = guild |> guild_url
+    url = Model.Guild.url(guild)
     headers = API.token_header(token)
 
     with {:ok, response} <- API.delete(url, headers),
-         do: {:ok, parse(response.body)}
+         do: {:ok, Model.Guild.parse(response.body)}
   end
 
   @doc """
@@ -139,7 +136,7 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.delete!("123")
       API.Guild{...}
   """
-  @spec delete!(Guild.t, Token.maybe) :: Guild.t | no_return
+  @spec delete!(guild, Token.maybe) :: Model.Guild.t | no_return
   def delete!(guild, token \\ nil) do
     case delete(guild, token) do
       {:ok, guild} -> guild
@@ -159,12 +156,12 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.guilds
       {:ok, [API.Guild{...}, ...]}
   """
-  @spec guilds(Token.maybe) :: API.maybe([Guild.t])
+  @spec guilds(Token.maybe) :: API.maybe([Model.Guild.t])
   def guilds(token \\ nil) do
     headers = API.token_header(token)
 
     with {:ok, response} <- API.get("/users/@me/guilds", headers),
-         user_guilds = Enum.map(response.body, &parse/1),
+         user_guilds = Model.Guild.parse(response.body),
          do: {:ok, user_guilds}
   end
 
@@ -179,7 +176,7 @@ defmodule DiscordElixir.API.Guild do
       iex> API.Guild.guilds!
       [API.Guild{...}, ...]
   """
-  @spec guilds!(Token.maybe) :: [Guild.t] | no_return
+  @spec guilds!(Token.maybe) :: [Model.Guild.t] | no_return
   def guilds!(token \\ nil) do
     case guilds(token) do
       {:ok, user_guilds} -> user_guilds
@@ -188,12 +185,6 @@ defmodule DiscordElixir.API.Guild do
     end
   end
 
-  @spec guild_url :: String.t
-  @spec guild_url(t) :: String.t
-  def guild_url, do: "/guilds"
-  def guild_url(%Guild{id: id}), do: guild_url(id)
-  def guild_url(guild_id), do: guild_url <> "/" <> to_string(guild_id)
-
   @spec validate_name_length(String.t) :: :ok | {:error, :too_short | :too_long}
   defp validate_name_length(name) do
     case String.length(name) do
@@ -201,13 +192,5 @@ defmodule DiscordElixir.API.Guild do
       x when x > 100 -> {:error, :too_long}
       _ -> :ok
     end
-  end
-
-  @spec parse(map) :: %Guild{}
-  def parse(guild) do
-    guild = for {key, val} <- guild, into: %{} do
-      {String.to_existing_atom(key), val}
-    end
-    Map.put_new(guild, :__struct__, Guild)
   end
 end
