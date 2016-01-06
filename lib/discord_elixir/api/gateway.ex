@@ -2,18 +2,18 @@ defmodule DiscordElixir.API.Gateway do
   @moduledoc """
   Discord's Gateway API.
 
-  If a token is stored using `API.Token`, all `token` arguments
+  If a token is stored using `Token`, all `token` arguments
   are optional.
   """
 
   alias DiscordElixir.API
-  alias DiscordElixir.API.Token
+  alias DiscordElixir.Token
 
   @doc """
   Gets the WebSocket endpoint.
 
   - `token` is the API token to use.
-    This is optional if `API.Token` is used.
+    This is optional if `Token` is used.
 
   ## Example
 
@@ -32,7 +32,7 @@ defmodule DiscordElixir.API.Gateway do
   Gets the WebSocket endpoint.
 
   - `token` is the API token to use.
-    This is optional if `API.Token` is used.
+    This is optional if `Token` is used.
 
   ## Example
 

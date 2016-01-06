@@ -12,6 +12,7 @@ defmodule DiscordElixir.API do
                        | {:error, atom}
 
   use HTTPoison.Base
+  alias DiscordElixir.Token
   alias __MODULE__, as: API
 
   @endpoint "https://discordapp.com/api"
@@ -37,12 +38,12 @@ defmodule DiscordElixir.API do
   Returns a token header.
 
   If `nil` is passed, this attempts to get the token from the
-  `DiscordElixir.API.Token` agent. This will fail if not used.
+  `DiscordElixir.Token` agent. This will fail if not used.
 
   As this is already a list, it must be merged to be used with other headers.
   """
   @spec token_header(String.t | nil) :: HTTPoison.headers
-  def token_header(nil), do: API.Token.get |> token_header
+  def token_header(nil), do: Token.get |> token_header
   def token_header(token), do: [{"Authorization", token}]
 
   @spec add_json_headers(HTTPoison.headers) :: HTTPoison.headers

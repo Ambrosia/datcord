@@ -2,7 +2,7 @@ defmodule DiscordElixir.API.Channel do
   @moduledoc """
   Discord's Channel API.
 
-  If a token is stored using `API.Token`, all `token` arguments
+  If a token is stored using `Token`, all `token` arguments
   are optional.
   """
 
@@ -11,9 +11,8 @@ defmodule DiscordElixir.API.Channel do
   """
   @type channel :: String.t | Model.Channel.t
 
-  alias DiscordElixir.API
-  alias DiscordElixir.API.{Guild, Token}
-  alias DiscordElixir.Model
+  alias DiscordElixir.{API, Token, Model}
+  alias DiscordElixir.API.Guild
   alias __MODULE__, as: Channel
 
   @type create_params :: %{name: String.t, type: :text | :voice}
@@ -27,7 +26,7 @@ defmodule DiscordElixir.API.Channel do
     - `name` must be a string 2-100 characters long.
     - `type` must either be `:text` or `:voice`.
       This is optional.
-  - `token` is the API token to use. This is optional if `API.Token` is used.
+  - `token` is the API token to use. This is optional if `Token` is used.
 
   ## Example
 
@@ -56,7 +55,7 @@ defmodule DiscordElixir.API.Channel do
     These are both required.
     - `name` must be a string 2-100 characters long.
     - `type` must either be `:text` or `:voice`.
-  - `token` is the API token to use. This is optional if `API.Token` is used.
+  - `token` is the API token to use. This is optional if `Token` is used.
 
   ## Example
 
@@ -85,7 +84,7 @@ defmodule DiscordElixir.API.Channel do
     - `position` is the position in the channel list to change to.
     Must be an int over -1.
     - `topic` is the topic to use for the channel. Must be a string.
-  - `token` is the API token to use. This is optional if `API.Token` is used.
+  - `token` is the API token to use. This is optional if `Token` is used.
 
   ## Example
 
@@ -124,7 +123,7 @@ defmodule DiscordElixir.API.Channel do
     - `position` is the position in the channel list to change to.
       Must be an int over -1.
     - `topic` is the topic to use for the channel. Must be a string.
-  - `token` is the API token to use. This is optional if `API.Token` is used.
+  - `token` is the API token to use. This is optional if `Token` is used.
 
   ## Example
 
@@ -144,7 +143,7 @@ defmodule DiscordElixir.API.Channel do
   Deletes a channel.
 
   - `channel` can either be a `Channel` struct or the channel's id (string).
-  - `token` is the API token to use. This is optional if `API.Token` is used.
+  - `token` is the API token to use. This is optional if `Token` is used.
 
   ## Example
 
@@ -164,7 +163,7 @@ defmodule DiscordElixir.API.Channel do
   Deletes a channel.
 
   - `channel` can either be a `Channel` struct or the channel's id (string).
-  - `token` is the API token to use. This is optional if `API.Token` is used.
+  - `token` is the API token to use. This is optional if `Token` is used.
 
   ## Example
 
@@ -186,7 +185,7 @@ defmodule DiscordElixir.API.Channel do
   The typing notification lasts for 5 seconds.
 
   - `channel` can either be a `Channel` struct or the channel's id (string).
-  - `token` is the API token to use. This is optional if `API.Token` is used.
+  - `token` is the API token to use. This is optional if `Token` is used.
 
   ## Example
 

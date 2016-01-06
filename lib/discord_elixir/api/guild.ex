@@ -4,7 +4,7 @@ defmodule DiscordElixir.API.Guild do
 
   Guilds are referred to as servers everywhere else.
 
-  If a token is stored using `API.Token`, all `token` arguments
+  If a token is stored using `Token`, all `token` arguments
   are optional.
   """
 
@@ -13,16 +13,14 @@ defmodule DiscordElixir.API.Guild do
   """
   @type guild :: String.t | Model.Guild.t
 
-  alias DiscordElixir.API
-  alias DiscordElixir.API.Token
-  alias DiscordElixir.Model
+  alias DiscordElixir.{API, Token, Model}
   alias __MODULE__, as: Guild
 
   @doc """
   Creates a guild using the given name.
 
   - `token` is the API token to use.
-    This is optional if `API.Token` is used.
+    This is optional if `Token` is used.
 
   ## Example
 
@@ -43,7 +41,7 @@ defmodule DiscordElixir.API.Guild do
 
   - `name` is the name to use for the guild.
   - `token` is the API token to use.
-    This is optional if `API.Token` is used.
+    This is optional if `Token` is used.
 
   ## Example
 
@@ -65,7 +63,7 @@ defmodule DiscordElixir.API.Guild do
   - `guild` can either be a `Guild` struct or the guild's id (string).
   - `name` is the guild's new name.
   - `token` is the API token to use.
-    This is optional if `API.Token` is used.
+    This is optional if `Token` is used.
 
   ## Example
 
@@ -87,7 +85,7 @@ defmodule DiscordElixir.API.Guild do
 
   - `guild` can either be a `Guild` struct or the guild's id (string).
   - `token` is the API token to use.
-    This is optional if `API.Token` is used.
+    This is optional if `Token` is used.
 
   ## Example
 
@@ -108,7 +106,7 @@ defmodule DiscordElixir.API.Guild do
 
   - `guild` can either be a `Guild` struct or the guild's id (string).
   - `token` is the API token to use.
-    This is optional if `API.Token` is used.
+    This is optional if `Token` is used.
 
   ## Example
 
@@ -129,7 +127,7 @@ defmodule DiscordElixir.API.Guild do
 
   - `guild` can either be a `Guild` struct or the guild's id (string).
   - `token` is the API token to use.
-    This is optional if `API.Token` is used.
+    This is optional if `Token` is used.
 
   ## Example
 
@@ -149,7 +147,7 @@ defmodule DiscordElixir.API.Guild do
   Gets all guilds this user is currently in.
 
   - `token` is the API token to use.
-    This is optional if `API.Token` is used.
+    This is optional if `Token` is used.
 
   ## Example
 
@@ -169,7 +167,7 @@ defmodule DiscordElixir.API.Guild do
   Gets all guilds this user is currently in.
 
   - `token` is the API token to use.
-    This is optional if `API.Token` is used.
+    This is optional if `Token` is used.
 
   ## Example
 
