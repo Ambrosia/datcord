@@ -23,6 +23,7 @@ defmodule DiscordElixir.API do
   defp process_request_headers(headers) do
     headers
     |> add_json_headers
+    |> add_user_agent
   end
 
   @spec process_request_body(map) :: String.t
@@ -49,5 +50,16 @@ defmodule DiscordElixir.API do
   defp add_json_headers(headers) do
     [{"Accept", "application/json"},
      {"Content-Type", "application/json"} | headers]
+  end
+
+  @spec add_user_agent(HTTPoison.headers) :: HTTPoison.headers
+  defp add_user_agent(headers) do
+    [{"User-Agent", user_agent} | headers]
+  end
+
+  @spec user_agent :: Stirng.t
+  defp user_agent do
+    version = DiscordElixir.Mixfile.project[:version]
+    "DiscordBot (ambrosia/discord_elixir #{version})"
   end
 end
