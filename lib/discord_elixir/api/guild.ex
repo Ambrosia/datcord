@@ -14,7 +14,6 @@ defmodule DiscordElixir.API.Guild do
   @type guild :: String.t | Model.Guild.t
 
   alias DiscordElixir.{API, Token, Model}
-  alias __MODULE__, as: Guild
 
   @doc """
   Creates a guild using the given name.
@@ -178,7 +177,7 @@ defmodule DiscordElixir.API.Guild do
   def guilds!(token \\ nil) do
     case guilds(token) do
       {:ok, user_guilds} -> user_guilds
-      {:error, error = %HTTPoison.Error{}} -> raise Error
+      {:error, error = %HTTPoison.Error{}} -> raise error
       {:error, error} -> raise ArgumentError, Atom.to_string(error)
     end
   end

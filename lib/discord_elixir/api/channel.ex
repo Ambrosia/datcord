@@ -12,8 +12,6 @@ defmodule DiscordElixir.API.Channel do
   @type channel :: String.t | Model.Channel.t
 
   alias DiscordElixir.{API, Token, Model}
-  alias DiscordElixir.API.Guild
-  alias __MODULE__, as: Channel
 
   @type create_params :: %{name: String.t, type: :text | :voice}
 

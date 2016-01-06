@@ -13,7 +13,6 @@ defmodule DiscordElixir.API do
 
   use HTTPoison.Base
   alias DiscordElixir.Token
-  alias __MODULE__, as: API
 
   @endpoint "https://discordapp.com/api"
 
