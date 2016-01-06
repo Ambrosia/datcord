@@ -1,20 +1,13 @@
 # DiscordElixir
 
-**TODO: Add description**
+hey everyone i'm going to add websockets in addition to the http api wrapper
+i'm also going to do a nearly complete implementation of the http api wrapper
+e.g. uploading files for avatars
+maybe it'll even be possible to send sound but i don't know, that's undocumented
+hold on to ur butts because it might take a while :^)
 
-## Installation
+if anything looks stupid let me know because you probably know more than me!
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
-
-  1. Add discord_elixir to your list of dependencies in `mix.exs`:
-
-        def deps do
-          [{:discord_elixir, "~> 0.0.1"}]
-        end
-
-  2. Ensure discord_elixir is started before your application:
-
-        def application do
-          [applications: [:discord_elixir]]
-        end
-
+p.s. i might keep track of progress in this readme if i get enough time to do it
+p.p.s. is it even worth testing the http api wrapper stuff
+p.p.p.s im gonna upload this to hex when its done
