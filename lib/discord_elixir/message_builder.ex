@@ -13,11 +13,11 @@ defmodule DiscordElixir.MessageBuilder do
   ## Example
 
       iex> text("Hi ") |> mention(user) |> text("!")
-      %Message{content: "Hi <@1>!", mentions: ["1"], nonce: nil, tts: false}
+      %Message{content: "Hi <@1>!", nonce: nil, tts: false}
 
       iex> mention(user) |> text(": ") |> name(friends) |> text(" are waiting for you")
-      %Message{content: "<@1>: <@20>, <@324> and <@7> are waiting for you",
-        mentions: ["1"], nonce: nil, tts: false}
+      %Message{content: "<@1>: john, john2 and ANIME LEGEND 420 are waiting for you",
+        nonce: nil, tts: false}
   """
 
   alias DiscordElixir.Model.User
@@ -28,7 +28,7 @@ defmodule DiscordElixir.MessageBuilder do
 
     This can be passed to API functions that require a message to be sent.
     """
-    defstruct content: "", mentions: [], nonce: nil, tts: false
+    defstruct content: "", nonce: nil, tts: false
 
     @type t :: %Message{}
   end
@@ -54,13 +54,12 @@ defmodule DiscordElixir.MessageBuilder do
   def mention(message \\ %Message{}, user, opts \\ [])
 
   def mention(message, users, opts) when is_list(users) do
-    user_ids = Enum.map(users, fn user -> user.id end)
-    %{name(message, users, opts) | mentions: message.mentions ++ user_ids}
+    separator = Keyword.get(opts, :separator, &list_to_english_list/1)
+    text(message, users |> user_ids_in_content(separator))
   end
 
   def mention(message, user, _opts) do
-    message = text(message, user |> user_in_content)
-    %{message | mentions: [user.id | message.mentions]}
+    message = text(message, user |> user_id_in_content)
   end
 
   @doc """
@@ -73,21 +72,30 @@ defmodule DiscordElixir.MessageBuilder do
 
   def name(message, users, opts) when is_list(users) do
     separator = Keyword.get(opts, :separator, &list_to_english_list/1)
-    text(message, users |> users_in_content(separator))
+    text(message, users |> user_names_in_content(separator))
   end
 
   def name(message, user, _opts) do
-    text(message, user |> user_in_content)
+    text(message, user |> user_name_in_content)
   end
 
-  @spec users_in_content([User.t], ([String.t] -> String.t)) :: String.t
-  defp users_in_content(users, separator) when is_list(users) do
-    string_list = users |> Enum.map(&user_in_content/1)
+  @spec user_ids_in_content([User.t], ([String.t] -> String.t)) :: String.t
+  defp user_ids_in_content(users, separator) when is_list(users) do
+    string_list = users |> Enum.map(&user_id_in_content/1)
     separator.(string_list)
   end
 
-  @spec user_in_content(User.t) :: String.t
-  defp user_in_content(%User{id: id}), do: "<@#{id}>"
+  @spec user_id_in_content(User.t) :: String.t
+  defp user_id_in_content(%User{id: id}), do: "<@#{id}>"
+
+  @spec user_names_in_content([User.t], ([String.t] -> String.t)) :: String.t
+  defp user_names_in_content(users, separator) when is_list(users) do
+    string_list = users |> Enum.map(&user_name_in_content/1)
+    separator.(string_list)
+  end
+
+  @spec user_name_in_content(User.t) :: String.t
+  defp user_name_in_content(%User{username: u}), do: u
 
   @doc """
   Converts a list of strings into a list in English

@@ -15,8 +15,9 @@ defmodule MessageBuilderTest do
 
   test "mention/2 properly mentions a user" do
     user = %User{id: "1"}
+    message = mention(user)
 
-    assert "1" in mention(user).mentions
+    assert String.contains?(message.content, "<@1>")
   end
 
   test "mention/2 properly mentions multiple users" do
@@ -25,32 +26,36 @@ defmodule MessageBuilderTest do
     message = mention(users)
 
     Enum.each list, fn n ->
-      assert to_string(n) in message.mentions
+      assert String.contains?(message.content, "<@#{n}>")
     end
   end
 
   test "name/2 properly inserts the name of a user" do
-    user = %User{id: "1"}
+    user = %User{id: "1", username: "abc"}
 
-    assert String.contains?(name(user).content, "<@1>")
+    assert String.contains?(name(user).content, "abc")
   end
 
   test "name/2 propertly inserts the names of multiple users" do
     list = 1..10
-    users = Enum.map(list, fn n -> %User{id: to_string(n)} end)
+    users = Enum.map list, fn n ->
+      %User{id: to_string(n), username: "a" <> to_string(n)}
+    end
     message = name(users)
 
     Enum.each list, fn n ->
-      assert String.contains?(message.content, "<@#{n}>")
+      assert String.contains?(message.content, "a" <> to_string(n))
     end
   end
 
   test "passing a custom separator to name/3 works" do
     separator = &Enum.join(&1, ",")
-    users = Enum.map(1..4, fn n -> %User{id: to_string(n)} end)
+    users = Enum.map 1..4, fn n ->
+      %User{id: to_string(n), username: to_string(n)}
+    end
 
     message = %Message{} |> name(users, separator: separator)
 
-    assert message.content == "<@1>,<@2>,<@3>,<@4>"
+    assert message.content == "1,2,3,4"
   end
 end
