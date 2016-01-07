@@ -1,5 +1,5 @@
 defmodule DiscordElixir.Model.User do
-  defstruct [:username, :id, :discriminator, :avatar]
+  defstruct username: nil, id: nil, discriminator: nil, avatar: nil
 
   alias DiscordElixir.Model
   alias __MODULE__, as: User
