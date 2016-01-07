@@ -59,7 +59,7 @@ defmodule DiscordElixir.MessageBuilder do
   end
 
   def mention(message, user, _opts) do
-    message = text(message, user |> user_id_in_content)
+    text(message, user |> user_id_in_content)
   end
 
   @doc """
