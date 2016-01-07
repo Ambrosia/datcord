@@ -22,7 +22,7 @@ defmodule DiscordElixir.Model do
   @spec parse(map, module) :: struct
   def parse(map, module) do
     map = for {k, v} <- map, into: %{} do
-      {String.to_existing_atom(k), v}
+      {String.to_atom(k), v}
     end
 
     struct(module, map)
