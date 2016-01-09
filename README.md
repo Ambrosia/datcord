@@ -1,21 +1,65 @@
 # DiscordElixir
+Library to make interacting with Discord in Elixier easier.
 
-hey everyone i'm going to add websockets in addition to the http api wrapper
+## Progress
 
-i'm also going to do a nearly complete implementation of the http api wrapper,
-e.g. uploading files for avatars
+### Mix tasks
+- [ ] Login Mix task
+- [ ] Logout Mix task
 
-maybe it'll even be possible to send sound but i don't know, that's undocumented
+### HTTP API
+- [ ] Authentication
+  - [ ] Login mix task
+  - [ ] Logout mix task
+- [ ] Channels
+  - [x] General
+    - [x] Create Channel
+    - [x] Edit Channel
+    - [x] Delete Channel
+    - [x] Broadcast Typing
+  - [x] Messages
+    - [x] Get Messages
+    - [x] Send Message
+    - [x] Edit Message
+    - [x] Delete Message
+    - [x] Acknowledge Message
+  - [ ] Permissions
+    - [ ] Credit/Edit Permission
+    - [ ] Delete Permission
+- [ ] Guilds
+  - [x] General
+    - [x] Create Guild
+    - [x] Edit Guild
+    - [x] Delete/Leave Guild
+    - [ ] Get Guild Channels
+  - [ ] Members
+    - [ ] Edit Member
+    - [ ] Kick Member
+  - [ ] Bans
+    - [ ] Get Bans
+    - [ ] Add Ban
+    - [ ] Remove Ban
+  - [ ] Roles
+    - [ ] Create Role
+    - [ ] Edit Role
+    - [ ] Redorder Roles
+    - [ ] Delete Roles
+- [ ] Invites
+  - [ ] Get Invite
+  - [ ] Accept Invite
+  - [ ] Create Invite
+  - [ ] Delete Invite
+- [ ] Users
+  - [ ] General
+    - [ ] Create Private Channel
+    - [ ] Get Avatar
+  - [ ] Profile
+    - [ ] Edit Profile
 
-hold on to ur butts because it might take a while :^)
+### WebSockets
+- [ ] ???
 
-if anything looks stupid let me know because you probably know more than me!
+## Help
+Should I be validating parameters or leave that up to users of this library? Did I write something in a stupid way? Anything else? Make an issue!
 
-i'm not sure if i should be validating parameters sent to api or not.
-i'm also not sure on the best way to do that
-
-p.s. i might keep track of progress in this readme if i get enough time to do it
-
-p.p.s. is it even worth testing the http api wrapper stuff
-
-p.p.p.s im gonna upload this to hex when its done
+Pull requests welcome!
