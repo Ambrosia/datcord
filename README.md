@@ -1,5 +1,5 @@
 # DiscordElixir
-Library to make interacting with Discord in Elixier easier.
+Library to make interacting with Discord in Elixir easier.
 
 ## Progress
 
