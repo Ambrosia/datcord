@@ -7,9 +7,8 @@ Library to make interacting with Discord in Elixir easier.
 - [x] Login Mix task
 
 ### HTTP API
-- [ ] Authentication
-  - [ ] Login mix task
-  - [ ] Logout mix task
+- [x] Authentication
+  - [x] Login
 - [ ] Channels
   - [x] General
     - [x] Create Channel
