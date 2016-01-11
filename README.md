@@ -57,6 +57,9 @@ Library to make interacting with Discord in Elixir easier.
 ### WebSockets
 - [ ] ???
 
+## Future
+This library won't hit 1.0 before Elixir 1.3 is released because `GenRouter` will replace `GenEvent`.
+
 ## Help
 Should I be validating parameters or leave that up to users of this library? Did I write something in a stupid way? Anything else? Make an issue!
 
