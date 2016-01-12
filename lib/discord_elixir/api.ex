@@ -27,6 +27,7 @@ defmodule DiscordElixir.API do
   end
 
   @spec process_request_body(map) :: String.t
+  defp process_request_body(""), do: ""
   defp process_request_body(map) when map == %{}, do: ""
   defp process_request_body(map), do: Poison.encode!(map)
 
