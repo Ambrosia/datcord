@@ -1,9 +1,9 @@
-defmodule DiscordElixir.Model.Guild do
+defmodule Datcord.Model.Guild do
   defstruct features: [], afk_timeout: nil, joined_at: nil, afk_channel_id: nil,
   id: nil, icon: nil, name: nil, roles: [], region: nil, embed_channel_id: nil,
   embed_enabled: nil, splash: nil, emojis: [], owner_id: nil
 
-  alias DiscordElixir.Model
+  alias Datcord.Model
   alias __MODULE__, as: Guild
 
   @type t :: %Guild{}

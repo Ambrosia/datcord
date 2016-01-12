@@ -1,4 +1,4 @@
-# DiscordElixir
+# Datcord
 Library to make interacting with Discord in Elixir easier.
 
 ## Progress

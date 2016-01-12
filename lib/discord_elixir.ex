@@ -1,2 +1,2 @@
-defmodule DiscordElixir do
+defmodule Datcord do
 end

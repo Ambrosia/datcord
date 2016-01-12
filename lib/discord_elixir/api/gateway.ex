@@ -1,4 +1,4 @@
-defmodule DiscordElixir.API.Gateway do
+defmodule Datcord.API.Gateway do
   @moduledoc """
   Discord's Gateway API.
 
@@ -6,8 +6,8 @@ defmodule DiscordElixir.API.Gateway do
   are optional.
   """
 
-  alias DiscordElixir.API
-  alias DiscordElixir.Token
+  alias Datcord.API
+  alias Datcord.Token
 
   @doc """
   Gets the WebSocket endpoint.

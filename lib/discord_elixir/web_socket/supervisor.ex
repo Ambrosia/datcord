@@ -1,7 +1,7 @@
-defmodule DiscordElixir.WebSocket.Supervisor do
+defmodule Datcord.WebSocket.Supervisor do
   use Supervisor
   require Logger
-  alias DiscordElixir.WebSocket.Handlers
+  alias Datcord.WebSocket.Handlers
 
   def start_link(token) do
     Logger.debug("Starting WebSocket")
@@ -18,7 +18,7 @@ defmodule DiscordElixir.WebSocket.Supervisor do
     add_default_handlers(event_pid, token)
 
     Logger.debug("Starting WebSocket client")
-    ws_client_spec = worker(DiscordElixir.WebSocket.Client, [token, event_pid])
+    ws_client_spec = worker(Datcord.WebSocket.Client, [token, event_pid])
     {:ok, ws_client_pid} = Supervisor.start_child(sup_pid, ws_client_spec)
 
     {:ok, event_pid, ws_client_pid}

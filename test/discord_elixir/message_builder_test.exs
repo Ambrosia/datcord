@@ -1,10 +1,10 @@
 defmodule MessageBuilderTest do
   use ExUnit.Case, async: true
-  doctest DiscordElixir.MessageBuilder, only: [{:list_to_english_list, 2}]
+  doctest Datcord.MessageBuilder, only: [{:list_to_english_list, 2}]
 
-  import DiscordElixir.MessageBuilder
-  alias DiscordElixir.MessageBuilder.Message
-  alias DiscordElixir.Model.User
+  import Datcord.MessageBuilder
+  alias Datcord.MessageBuilder.Message
+  alias Datcord.Model.User
 
   test "text/1 appends text to message" do
     message = %Message{content: "test"}

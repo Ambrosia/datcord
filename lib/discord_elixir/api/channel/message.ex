@@ -1,4 +1,4 @@
-defmodule DiscordElixir.API.Channel.Message do
+defmodule Datcord.API.Channel.Message do
   @moduledoc """
   Discord's Message API.
 
@@ -16,7 +16,7 @@ defmodule DiscordElixir.API.Channel.Message do
   """
   @type new_message :: String.t | MessageBuilder.Message.t
 
-  alias DiscordElixir.{API, Model, MessageBuilder, Token}
+  alias Datcord.{API, Model, MessageBuilder, Token}
 
   @doc """
   Gets a block of messages from the given `Channel`.

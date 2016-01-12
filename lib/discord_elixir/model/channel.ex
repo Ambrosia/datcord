@@ -1,8 +1,8 @@
-defmodule DiscordElixir.Model.Channel do
+defmodule Datcord.Model.Channel do
   defstruct guild_id: nil, name: nil, permission_overwrites: [], topic: nil,
   position: nil, last_message_id: nil, type: nil, id: nil, is_private: nil
 
-  alias DiscordElixir.Model
+  alias Datcord.Model
   alias __MODULE__, as: Channel
 
   @type t :: %Channel{}

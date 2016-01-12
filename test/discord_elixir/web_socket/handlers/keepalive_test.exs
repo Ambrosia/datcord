@@ -1,6 +1,6 @@
-defmodule DiscordElixir.WebSocket.Handlers.KeepaliveTest do
+defmodule Datcord.WebSocket.Handlers.KeepaliveTest do
   use ExUnit.Case, async: true
-  alias DiscordElixir.WebSocket.Handlers.Keepalive
+  alias Datcord.WebSocket.Handlers.Keepalive
 
   setup do
     {:ok, pid} = GenEvent.start

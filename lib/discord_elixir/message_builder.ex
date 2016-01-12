@@ -1,4 +1,4 @@
-defmodule DiscordElixir.MessageBuilder do
+defmodule Datcord.MessageBuilder do
   @moduledoc """
   Helper to easily and properly build messages to send
 
@@ -20,7 +20,7 @@ defmodule DiscordElixir.MessageBuilder do
         nonce: nil, tts: false}
   """
 
-  alias DiscordElixir.Model.User
+  alias Datcord.Model.User
 
   defmodule Message do
     @moduledoc """

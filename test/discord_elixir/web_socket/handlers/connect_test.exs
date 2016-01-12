@@ -1,6 +1,6 @@
-defmodule DiscordElixir.WebSocket.Handlers.ConnectTest do
+defmodule Datcord.WebSocket.Handlers.ConnectTest do
   use ExUnit.Case, async: true
-  alias DiscordElixir.WebSocket.Handlers.Connect
+  alias Datcord.WebSocket.Handlers.Connect
 
   setup do
     {:ok, pid} = GenEvent.start

@@ -1,4 +1,4 @@
-defmodule DiscordElixir.Token do
+defmodule Datcord.Token do
   @moduledoc """
   Helper for storing a token to use with the API.
 

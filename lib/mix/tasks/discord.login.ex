@@ -17,7 +17,7 @@ defmodule Mix.Tasks.Discord.Login do
   """
 
   use Mix.Task
-  alias DiscordElixir.API.Authentication
+  alias Datcord.API.Authentication
 
   def run([email, password]) do
     {:ok, _} = Application.ensure_all_started(:httpoison)

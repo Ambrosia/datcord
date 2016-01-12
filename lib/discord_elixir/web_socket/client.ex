@@ -1,11 +1,11 @@
-defmodule DiscordElixir.WebSocket.Client do
+defmodule Datcord.WebSocket.Client do
   defmodule State do
     defstruct [:token, :event_pid]
   end
 
   @behaviour :websocket_client_handler
 
-  alias DiscordElixir.API
+  alias Datcord.API
   require Logger
   import Poison, only: [encode!: 1, decode!: 1]
 

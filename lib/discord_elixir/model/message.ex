@@ -1,10 +1,10 @@
-defmodule DiscordElixir.Model.Message do
+defmodule Datcord.Model.Message do
   defstruct nonce: nil, attachments: [], tts: false, embeds: [], timestamp: [],
   mention_everyone: false, id: nil, edited_timestamp: nil, author: nil,
   content: [], channel_id: nil, mentions: []
 
-  alias DiscordElixir.Model
-  alias DiscordElixir.Model.{Channel, User}
+  alias Datcord.Model
+  alias Datcord.Model.{Channel, User}
   alias __MODULE__, as: Message
 
   @type t :: %Message{}

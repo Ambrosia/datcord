@@ -1,4 +1,4 @@
-defmodule DiscordElixir.API do
+defmodule Datcord.API do
   @moduledoc """
   HTTPoison.Base wrapper.
 
@@ -12,7 +12,7 @@ defmodule DiscordElixir.API do
                        | {:error, atom}
 
   use HTTPoison.Base
-  alias DiscordElixir.Token
+  alias Datcord.Token
 
   @endpoint "https://discordapp.com/api"
 
@@ -39,7 +39,7 @@ defmodule DiscordElixir.API do
   Returns a token header.
 
   If `nil` is passed, this attempts to get the token from the
-  `DiscordElixir.Token` agent. This will fail if not used.
+  `Datcord.Token` agent. This will fail if not used.
 
   As this is already a list, it must be merged to be used with other headers.
   """
@@ -60,7 +60,7 @@ defmodule DiscordElixir.API do
 
   @spec user_agent :: String.t
   defp user_agent do
-    version = DiscordElixir.Mixfile.project[:version]
-    "DiscordBot (ambrosia/discord_elixir #{version})"
+    version = Datcord.Mixfile.project[:version]
+    "DiscordBot (ambrosia/datcord #{version})"
   end
 end

@@ -1,6 +1,6 @@
-defmodule DiscordElixirTest do
+defmodule DatcordTest do
   use ExUnit.Case
-  doctest DiscordElixir
+  doctest Datcord
 
   test "the truth" do
     assert 1 + 1 == 2

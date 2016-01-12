@@ -1,4 +1,4 @@
-defmodule DiscordElixir.Model do
+defmodule Datcord.Model do
   @moduledoc """
   Utility function for `Model`s
   """
@@ -9,10 +9,10 @@ defmodule DiscordElixir.Model do
   ## Example
 
       iex> Model.parse(channels, Channel)
-      [%DiscordElixir.Model.Channel{...}]
+      [%Datcord.Model.Channel{...}]
 
       iex> Model.Parse(guild, Guild)
-      DiscordElixir.Model.Guild{...}
+      Datcord.Model.Guild{...}
   """
   @spec parse([map], module) :: [struct]
   def parse(maps, module) when is_list(maps) do

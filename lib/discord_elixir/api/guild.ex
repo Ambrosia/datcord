@@ -1,4 +1,4 @@
-defmodule DiscordElixir.API.Guild do
+defmodule Datcord.API.Guild do
   @moduledoc """
   Discord's Guild API.
 
@@ -13,7 +13,7 @@ defmodule DiscordElixir.API.Guild do
   """
   @type guild :: String.t | Model.Guild.t
 
-  alias DiscordElixir.{API, Token, Model}
+  alias Datcord.{API, Token, Model}
 
   @doc """
   Creates a guild using the given name.

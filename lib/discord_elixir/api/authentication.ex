@@ -1,9 +1,9 @@
-defmodule DiscordElixir.API.Authentication do
+defmodule Datcord.API.Authentication do
   @moduledoc """
   Discord authentication.
   """
 
-  alias DiscordElixir.API
+  alias Datcord.API
 
   @doc """
   Logs in to Discord with the given email and password.

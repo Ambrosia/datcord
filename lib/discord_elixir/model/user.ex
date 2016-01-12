@@ -1,7 +1,7 @@
-defmodule DiscordElixir.Model.User do
+defmodule Datcord.Model.User do
   defstruct username: nil, id: nil, discriminator: nil, avatar: nil
 
-  alias DiscordElixir.Model
+  alias Datcord.Model
   alias __MODULE__, as: User
 
   @type t :: %User{}

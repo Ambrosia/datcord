@@ -1,4 +1,4 @@
-defmodule DiscordElixir.API.Channel do
+defmodule Datcord.API.Channel do
   @moduledoc """
   Discord's Channel API.
 
@@ -11,7 +11,7 @@ defmodule DiscordElixir.API.Channel do
   """
   @type channel :: String.t | Model.Channel.t
 
-  alias DiscordElixir.{API, Token, Model}
+  alias Datcord.{API, Token, Model}
 
   @type create_params :: %{name: String.t, type: :text | :voice}
 

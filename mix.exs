@@ -1,8 +1,8 @@
-defmodule DiscordElixir.Mixfile do
+defmodule Datcord.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :discord_elixir,
+    [app: :datcord,
      version: "0.1.0",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,

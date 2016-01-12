@@ -1,7 +1,7 @@
-defmodule DiscordElixir.ModelTest do
+defmodule Datcord.ModelTest do
   use ExUnit.Case, async: true
 
-  alias DiscordElixir.Model
+  alias Datcord.Model
 
   defmodule Test do
     defstruct [:a, :b]

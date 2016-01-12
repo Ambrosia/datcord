@@ -1,10 +1,10 @@
-defmodule DiscordElixir.WebSocket.Handlers.Connect do
+defmodule Datcord.WebSocket.Handlers.Connect do
   @moduledoc """
   Sends the mandatory connect message to Discord on websocket connect.
   """
 
   use GenEvent
-  alias DiscordElixir.WebSocket.Client
+  alias Datcord.WebSocket.Client
   require Logger
 
   def init(token) do
@@ -28,8 +28,8 @@ defmodule DiscordElixir.WebSocket.Handlers.Connect do
       d: %{token: token,
            v: 3,
            properties: %{"$os" => os,
-                         "$browser" => "discord_elixir",
-                         "$device" => "discord_elixir",
+                         "$browser" => "datcord",
+                         "$device" => "datcord",
                          "$referrer" => "",
                          "$referring_domain" => ""},
            large_threshold: 100}}

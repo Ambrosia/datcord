@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :discord_elixir, key: :value
+#     config :datcord, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:discord_elixir, :key)
+#     Application.get_env(:datcord, :key)
 #
 # Or configure a 3rd-party app:
 #
@@ -28,3 +28,5 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env}.exs"
+
+config :datcord, token: "MTMxOTk3OTYwMjc4OTAwNzM2.CXaCPA.TA6IGTC2hvoLZkgazWoyWKNFvJc"

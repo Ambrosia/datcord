@@ -1,4 +1,4 @@
-defmodule DiscordElixir.WebSocket.Handlers.Keepalive do
+defmodule Datcord.WebSocket.Handlers.Keepalive do
   @moduledoc """
   Sends Keepalive messages to Discord.
 
@@ -14,7 +14,7 @@ defmodule DiscordElixir.WebSocket.Handlers.Keepalive do
   end
 
   use GenEvent
-  alias DiscordElixir.WebSocket.Client
+  alias Datcord.WebSocket.Client
   require Logger
 
   @ready_states ["READY", "RESUME"]
