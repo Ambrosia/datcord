@@ -17,7 +17,7 @@ defmodule Datcord.WebSocket.Handlers.Keepalive do
   alias Datcord.WebSocket.Client
   require Logger
 
-  @ready_states ["READY", "RESUME"]
+  @ready_states ["READY", "RESUMED"]
 
   def init([]) do
     Logger.debug("Keepalive handler started")

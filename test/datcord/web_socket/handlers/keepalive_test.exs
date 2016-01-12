@@ -27,7 +27,7 @@ defmodule Datcord.WebSocket.Handlers.KeepaliveTest do
     ready_msg = %{"t" => "READY", "d" => %{"heartbeat_interval" => 5000}}
     GenEvent.ack_notify(context.pid, {:message, ready_msg})
 
-    resume_msg = %{"t" => "RESUME", "d" => %{"heartbeat_interval" => 100}}
+    resume_msg = %{"t" => "RESUMED", "d" => %{"heartbeat_interval" => 100}}
     GenEvent.ack_notify(context.pid, {:message, resume_msg})
 
     assert_receive {:cast, {:text, msg}}, 200
