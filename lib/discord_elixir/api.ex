@@ -57,7 +57,7 @@ defmodule DiscordElixir.API do
     [{"User-Agent", user_agent} | headers]
   end
 
-  @spec user_agent :: Stirng.t
+  @spec user_agent :: String.t
   defp user_agent do
     version = DiscordElixir.Mixfile.project[:version]
     "DiscordBot (ambrosia/discord_elixir #{version})"
