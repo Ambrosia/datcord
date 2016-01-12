@@ -1,5 +1,5 @@
 defmodule Datcord.Model.Message do
-  defstruct nonce: nil, attachments: [], tts: false, embeds: [], timestamp: [],
+  defstruct nonce: nil, attachments: [], tts: false, embeds: [], timestamp: nil,
   mention_everyone: false, id: nil, edited_timestamp: nil, author: nil,
   content: [], channel_id: nil, mentions: []
 
