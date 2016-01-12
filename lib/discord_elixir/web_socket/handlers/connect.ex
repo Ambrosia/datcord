@@ -27,8 +27,7 @@ defmodule DiscordElixir.WebSocket.Handlers.Connect do
                          "$device" => "discord_elixir",
                          "$referrer" => "",
                          "$referring_domain" => ""},
-           large_threshold: 100,
-           compress: true}}
+           large_threshold: 100}}
     |> Poison.encode!
   end
 
