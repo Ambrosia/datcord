@@ -37,9 +37,10 @@ defmodule DiscordElixir.WebSocket.Client do
     {:ok, state}
   end
 
-  def websocket_handle({:text, msg}, _conn_state, state) do
-    Logger.debug("Received message #{inspect msg}")
-    GenEvent.ack_notify(state.event_pid, {:message, msg |> decode!})
+  def websocket_handle({:text, json}, _conn_state, state) do
+    map = json |> decode!
+    Logger.debug("Received message #{inspect map}")
+    GenEvent.ack_notify(state.event_pid, {:message, map})
     {:ok, state}
   end
 
