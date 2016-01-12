@@ -75,7 +75,6 @@ defmodule DiscordElixir.WebSocket.Handlers.Keepalive do
   defp keepalive_msg do
     %{op: 1,
       d: time}
-    |> Poison.encode!
   end
 
   @spec time :: integer

@@ -7,6 +7,7 @@ defmodule DiscordElixir.WebSocket.Client do
 
   alias DiscordElixir.API
   require Logger
+  import Poison, only: [encode!: 1, decode!: 1]
 
   # Public API
 
@@ -21,8 +22,11 @@ defmodule DiscordElixir.WebSocket.Client do
 
   def cast(pid, message) do
     Logger.debug("Sending message #{inspect message}")
-    :websocket_client.cast(pid, {:text, message})
+    do_cast(pid, message)
   end
+
+  defp do_cast(pid, map) when is_map(map), do: do_cast(pid, map |> encode!)
+  defp do_cast(pid, message), do: :websocket_client.cast(pid, {:text, message})
 
   # Private
 
@@ -35,7 +39,7 @@ defmodule DiscordElixir.WebSocket.Client do
 
   def websocket_handle({:text, msg}, _conn_state, state) do
     Logger.debug("Received message #{inspect msg}")
-    GenEvent.ack_notify(state.event_pid, {:message, msg |> Poison.decode!})
+    GenEvent.ack_notify(state.event_pid, {:message, msg |> decode!})
     {:ok, state}
   end
 

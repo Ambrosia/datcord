@@ -33,7 +33,6 @@ defmodule DiscordElixir.WebSocket.Handlers.Connect do
                          "$referrer" => "",
                          "$referring_domain" => ""},
            large_threshold: 100}}
-    |> Poison.encode!
   end
 
   @spec os :: String.t
