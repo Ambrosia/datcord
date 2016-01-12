@@ -1,5 +1,6 @@
 defmodule Datcord.Model.User do
-  defstruct username: nil, id: nil, discriminator: nil, avatar: nil
+  defstruct username: nil, id: nil, discriminator: nil, avatar: nil,
+  verified: nil, email: nil
 
   alias Datcord.Model
   alias __MODULE__, as: User
