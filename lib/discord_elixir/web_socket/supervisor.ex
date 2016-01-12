@@ -15,7 +15,7 @@ defmodule DiscordElixir.WebSocket.Supervisor do
     event_spec = worker(GenEvent, [])
     {:ok, event_pid} = Supervisor.start_child(sup_pid, event_spec)
 
-    add_default_handlers(event_pid)
+    add_default_handlers(event_pid, token)
 
     Logger.debug("Starting WebSocket client")
     ws_client_spec = worker(DiscordElixir.WebSocket.Client, [token, event_pid])
@@ -28,8 +28,8 @@ defmodule DiscordElixir.WebSocket.Supervisor do
     supervise([], strategy: :one_for_one)
   end
 
-  def add_default_handlers(event_pid) do
-    GenEvent.add_handler(event_pid, Handlers.Connect, [])
+  def add_default_handlers(event_pid, token) do
+    GenEvent.add_handler(event_pid, Handlers.Connect, token)
     GenEvent.add_handler(event_pid, Handlers.Keepalive, [])
   end
 end

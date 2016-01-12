@@ -1,6 +1,6 @@
 defmodule DiscordElixir.WebSocket.Handlers.Keepalive do
   defmodule State do
-    defstruct [:interval, :tref]
+    defstruct [:interval, :tref, :ws_client_pid]
   end
 
   use GenEvent
@@ -14,10 +14,14 @@ defmodule DiscordElixir.WebSocket.Handlers.Keepalive do
     {:ok, %State{}}
   end
 
-  def handle_event({:message, {ws_client_pid, _}, msg = %{"t" => event_type}}, state)
+  def handle_event({:connected, ws_client_pid}, state) do
+    {:ok, %State{state | ws_client_pid: ws_client_pid}}
+  end
+
+  def handle_event({:message, msg = %{"t" => event_type}}, state)
   when event_type in @ready_states do
     Logger.debug("READY or RESUME event received")
-    {:ok, handle_heartbeat(msg, state, ws_client_pid)}
+    {:ok, handle_heartbeat(msg, state, state.ws_client_pid)}
   end
 
   def handle_event(_, state) do

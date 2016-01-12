@@ -3,15 +3,15 @@ defmodule DiscordElixir.WebSocket.Handlers.Connect do
   alias DiscordElixir.WebSocket.Client
   require Logger
 
-  def init([]) do
+  def init(token) do
     Logger.debug("Connect handler started")
-    {:ok, []}
+    {:ok, token}
   end
 
-  def handle_event({:connected, {ws_client_pid, token}}, state) do
+  def handle_event({:connected, ws_client_pid}, token) do
     Logger.debug("Sending connect message")
     Client.cast(ws_client_pid, connect_msg(token))
-    {:ok, state}
+    {:ok, token}
   end
 
   def handle_event(_, state) do
