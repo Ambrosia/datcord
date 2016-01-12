@@ -1,4 +1,8 @@
 defmodule DiscordElixir.WebSocket.Handlers.Connect do
+  @moduledoc """
+  Sends the mandatory connect message to Discord on websocket connect.
+  """
+
   use GenEvent
   alias DiscordElixir.WebSocket.Client
   require Logger
@@ -18,6 +22,7 @@ defmodule DiscordElixir.WebSocket.Handlers.Connect do
     {:ok, state}
   end
 
+  @spec connect_msg(String.t) :: String.t
   defp connect_msg(token) do
     %{op: 2,
       d: %{token: token,
@@ -31,6 +36,7 @@ defmodule DiscordElixir.WebSocket.Handlers.Connect do
     |> Poison.encode!
   end
 
+  @spec os :: String.t
   defp os do
     case :os.type do
       {:unix, :linux} -> "Linux"
