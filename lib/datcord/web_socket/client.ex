@@ -6,6 +6,7 @@ defmodule Datcord.WebSocket.Client do
   @behaviour :websocket_client_handler
 
   alias Datcord.API
+  alias Datcord.WebSocket.MessageParser
   require Logger
   import Poison, only: [encode!: 1, decode!: 1]
 
@@ -38,9 +39,10 @@ defmodule Datcord.WebSocket.Client do
   end
 
   def websocket_handle({:text, json}, _conn_state, state) do
-    map = json |> decode!
+    raw_map = json |> decode!
+    {type, map} = raw_map |> MessageParser.parse
     Logger.debug("Received message #{inspect map}")
-    GenEvent.ack_notify(state.event_pid, {:message, map})
+    GenEvent.ack_notify(state.event_pid, {:message, type, map})
     {:ok, state}
   end
 

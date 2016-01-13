@@ -17,7 +17,7 @@ defmodule Datcord.WebSocket.Handlers.Keepalive do
   alias Datcord.WebSocket.Client
   require Logger
 
-  @ready_states ["READY", "RESUMED"]
+  @ready_states [:ready, :resumed]
 
   def init([]) do
     Logger.debug("Keepalive handler started")
@@ -28,7 +28,7 @@ defmodule Datcord.WebSocket.Handlers.Keepalive do
     {:ok, %State{state | ws_client_pid: ws_client_pid}}
   end
 
-  def handle_event({:message, msg = %{"t" => event_type}}, state)
+  def handle_event({:message, event_type, msg}, state)
   when event_type in @ready_states do
     Logger.debug("READY or RESUME event received")
     %{"d" => %{"heartbeat_interval" => interval}} = msg

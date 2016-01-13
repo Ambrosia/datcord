@@ -11,13 +11,13 @@ defmodule Datcord.WebSocket.Handlers.KeepaliveTest do
 
   test "Keepalive handler does nothing when wrong message type is sent", context do
     msg = %{"t" => "TEST"}
-    GenEvent.ack_notify(context.pid, {:message, msg})
+    GenEvent.ack_notify(context.pid, {:message, :test, msg})
     refute_receive {:cast, {:text, _}}
   end
 
   test "Keepalive handler sends keepalive on connect", context do
     msg = %{"t" => "READY", "d" => %{"heartbeat_interval" => 500}}
-    GenEvent.ack_notify(context.pid, {:message, msg})
+    GenEvent.ack_notify(context.pid, {:message, :ready, msg})
 
     assert_receive {:cast, {:text, msg}}, 600
     assert msg |> Poison.decode! |> get_in(["op"]) == 1
@@ -25,10 +25,10 @@ defmodule Datcord.WebSocket.Handlers.KeepaliveTest do
 
   test "Keepalive handler detects interval changes", context do
     ready_msg = %{"t" => "READY", "d" => %{"heartbeat_interval" => 5000}}
-    GenEvent.ack_notify(context.pid, {:message, ready_msg})
+    GenEvent.ack_notify(context.pid, {:message, :ready, ready_msg})
 
     resume_msg = %{"t" => "RESUMED", "d" => %{"heartbeat_interval" => 100}}
-    GenEvent.ack_notify(context.pid, {:message, resume_msg})
+    GenEvent.ack_notify(context.pid, {:message, :resumed, resume_msg})
 
     assert_receive {:cast, {:text, msg}}, 200
     assert msg |> Poison.decode! |> get_in(["op"]) == 1
