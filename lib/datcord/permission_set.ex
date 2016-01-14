@@ -62,7 +62,7 @@ defmodule Datcord.PermissionSet do
             voice_move_members: 24,
             voice_use_vad: 25]
 
-  @permissions Keyword.keys(@offsets) |> MapSet.new
+  @permissions Keyword.keys(@offsets)
 
   @doc """
   Creates a new PermissionSet struct from a list of allowed and a list of
@@ -250,10 +250,10 @@ defmodule Datcord.PermissionSet do
   defp valid_permissions(permissions) do
     permissions
     |> MapSet.new
-    |> MapSet.subset?(@permissions)
+    |> MapSet.subset?(@permissions |> MapSet.new)
   end
 
   defp valid_permission(permission) do
-    MapSet.member?(@permissions, permission)
+    MapSet.member?(@permissions |> MapSet.new, permission)
   end
 end
