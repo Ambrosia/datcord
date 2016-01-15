@@ -55,7 +55,17 @@ Library to make interacting with Discord in Elixir easier.
     - [ ] Edit Profile
 
 ### WebSockets
-- [ ] ???
+- [x] Successful connection
+- [ ] Compression
+- [ ] Handlers
+  - [x] Connect
+  - [x] Keepalive
+  - [ ] State
+
+### Other
+- [ ] State tracker (updated by HTTP calls and WebSocket events)
+- [ ] Refactoring HTTP API functions and supervision tree
+- [ ] Rate limiting on HTTP calls
 
 ## Future
 This library won't hit 1.0 before Elixir 1.3 is released because `GenRouter` will replace `GenEvent`.
