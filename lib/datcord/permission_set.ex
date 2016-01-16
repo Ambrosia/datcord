@@ -205,7 +205,7 @@ defmodule Datcord.PermissionSet do
   Converts the denied permissions of a PermissionSet to an integer
 
   ## Example
-  
+
       iex> PermissionSet.deny_to_integer(permissionset)
       {:ok, 0}
   """
