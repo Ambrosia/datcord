@@ -9,7 +9,7 @@ Library to make interacting with Discord in Elixir easier.
 ### HTTP API
 - [x] Authentication
   - [x] Login
-- [ ] Channels
+- [x] Channels
   - [x] General
     - [x] Create Channel
     - [x] Edit Channel
@@ -21,9 +21,9 @@ Library to make interacting with Discord in Elixir easier.
     - [x] Edit Message
     - [x] Delete Message
     - [x] Acknowledge Message
-  - [ ] Permissions
-    - [ ] Credit/Edit Permission
-    - [ ] Delete Permission
+  - [x] Permissions
+    - [x] Credit/Edit Permission
+    - [x] Delete Permission
 - [ ] Guilds
   - [x] General
     - [x] Create Guild
