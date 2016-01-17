@@ -54,6 +54,6 @@ defmodule Datcord.Model do
              keys -> keys
            end
 
-    update_in(map, keys, &parse(&1, module))
+    update_in(map, keys, &module.parse(&1))
   end
 end
