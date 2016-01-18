@@ -3,7 +3,6 @@ defmodule Datcord.Model.Member do
   deaf: nil
 
   alias Datcord.Model
-  alias Datcord.Model.{Roles, User}
   alias __MODULE__, as: Member
 
   @type t :: %Member{}
@@ -11,7 +10,7 @@ defmodule Datcord.Model.Member do
   @spec parse(map | [map]) :: t | [t]
   def parse(map) do
     map
-    |> Model.parse_inner({"user", User})
+    |> Model.parse_inner({"user", Model.User})
     |> Model.parse(Member)
   end
 end

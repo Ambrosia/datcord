@@ -22,9 +22,6 @@ defmodule Datcord.API.Authentication do
   defp parse_login_response(%{"password" => errors}), do: {:error, errors}
   defp parse_login_response(%{"token" => token}), do: {:ok, token}
 
-  defp parse_logout_response(map) when map == %{}, do: :ok
-
   defp auth_url, do: "/auth"
   defp login_url, do: auth_url <> "/login"
-  defp logout_url, do: auth_url <> "/logout"
 end
