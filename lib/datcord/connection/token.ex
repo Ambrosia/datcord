@@ -1,4 +1,4 @@
-defmodule Datcord.Token do
+defmodule Datcord.Connection.Token do
   @moduledoc """
   Helper for storing a token to use with the API.
 

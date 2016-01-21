@@ -17,6 +17,7 @@ defmodule Datcord.API.Channel.Permission do
   """
   @type permission :: map | Model.Permission.t
 
+  alias Datcord.Connection.Token
   alias Datcord.{API, Model}
 
   @doc """

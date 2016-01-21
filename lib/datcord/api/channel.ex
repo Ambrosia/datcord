@@ -11,7 +11,8 @@ defmodule Datcord.API.Channel do
   """
   @type channel :: String.t | Model.Channel.t
 
-  alias Datcord.{API, Token, Model}
+  alias Datcord.Connection.Token
+  alias Datcord.{API, Model}
 
   @type create_params :: %{name: String.t, type: :text | :voice}
 

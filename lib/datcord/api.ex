@@ -12,7 +12,7 @@ defmodule Datcord.API do
                        | {:error, atom}
 
   use HTTPoison.Base
-  alias Datcord.Token
+  alias Datcord.Connection.Token
 
   @endpoint "https://discordapp.com/api"
 
@@ -39,7 +39,7 @@ defmodule Datcord.API do
   Returns a token header.
 
   If `nil` is passed, this attempts to get the token from the
-  `Datcord.Token` agent. This will fail if not used.
+  `Datcord.Connection.Token` agent. This will fail if not used.
 
   As this is already a list, it must be merged to be used with other headers.
   """

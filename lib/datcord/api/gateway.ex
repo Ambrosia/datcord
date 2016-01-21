@@ -7,7 +7,7 @@ defmodule Datcord.API.Gateway do
   """
 
   alias Datcord.API
-  alias Datcord.Token
+  alias Datcord.Connection.Token
 
   @doc """
   Gets the WebSocket endpoint.

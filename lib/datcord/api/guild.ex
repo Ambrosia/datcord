@@ -13,7 +13,8 @@ defmodule Datcord.API.Guild do
   """
   @type guild :: String.t | Model.Guild.t
 
-  alias Datcord.{API, Token, Model}
+  alias Datcord.Connection.Token
+  alias Datcord.{API, Model}
 
   @doc """
   Creates a guild using the given name.

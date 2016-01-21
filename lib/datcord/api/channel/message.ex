@@ -16,7 +16,8 @@ defmodule Datcord.API.Channel.Message do
   """
   @type new_message :: String.t | MessageBuilder.Message.t
 
-  alias Datcord.{API, Model, MessageBuilder, Token}
+  alias Datcord.Connection.Token
+  alias Datcord.{API, Model, MessageBuilder}
 
   @doc """
   Gets a block of messages from the given `Channel`.
