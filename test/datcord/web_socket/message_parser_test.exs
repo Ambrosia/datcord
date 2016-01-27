@@ -1,10 +1,10 @@
 Code.require_file("../../fixtures/web_socket_fixtures.exs", __DIR__)
 
-defmodule Datcord.WebSocket.MessageParserTest do
+defmodule Datcord.Connection.WebSocket.MessageParserTest do
   use ExUnit.Case, async: true
 
   alias Datcord.Fixtures.WebSocketMessages
-  alias Datcord.WebSocket.MessageParser
+  alias Datcord.Connection.WebSocket.MessageParser
   alias Datcord.Model.{Channel, Guild, Member, Message, Role, User}
 
   test "READY messages are parsed correctly" do

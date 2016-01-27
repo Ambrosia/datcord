@@ -1,10 +1,10 @@
-defmodule Datcord.WebSocket.Handlers.Connect do
+defmodule Datcord.WebSocketHandlers.Connect do
   @moduledoc """
   Sends the mandatory connect message to Discord on websocket connect.
   """
 
   use GenEvent
-  alias Datcord.WebSocket.Client
+  alias Datcord.Connection.WebSocket
   require Logger
 
   def init(token) do
@@ -14,7 +14,7 @@ defmodule Datcord.WebSocket.Handlers.Connect do
 
   def handle_event({:connected, ws_client_pid}, token) do
     Logger.debug("Sending connect message")
-    Client.cast(ws_client_pid, connect_msg(token))
+    WebSocket.cast(ws_client_pid, connect_msg(token))
     {:ok, token}
   end
 

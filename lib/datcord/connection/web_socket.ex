@@ -1,4 +1,4 @@
-defmodule Datcord.WebSocket.Client do
+defmodule Datcord.Connection.WebSocket do
   defmodule State do
     defstruct [:token, :event_pid]
   end
@@ -6,7 +6,7 @@ defmodule Datcord.WebSocket.Client do
   @behaviour :websocket_client_handler
 
   alias Datcord.API
-  alias Datcord.WebSocket.MessageParser
+  alias Datcord.Connection.WebSocket.MessageParser
   require Logger
   import Poison, only: [encode!: 1, decode!: 1]
 

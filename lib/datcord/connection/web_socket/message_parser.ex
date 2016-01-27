@@ -1,4 +1,4 @@
-defmodule Datcord.WebSocket.MessageParser do
+defmodule Datcord.Connection.WebSocket.MessageParser do
   alias Datcord.Model.{Channel, Guild, Member, Message, Role, User}
 
   def parse(msg = %{"t" => "READY"}) do

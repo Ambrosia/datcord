@@ -1,6 +1,6 @@
-defmodule Datcord.WebSocket.Handlers.ConnectTest do
+defmodule Datcord.WebSocketHandlers.ConnectTest do
   use ExUnit.Case, async: true
-  alias Datcord.WebSocket.Handlers.Connect
+  alias Datcord.WebSocketHandlers.Connect
 
   setup do
     {:ok, pid} = GenEvent.start

@@ -1,4 +1,4 @@
-defmodule Datcord.WebSocket.Handlers.Keepalive do
+defmodule Datcord.WebSocketHandlers.Keepalive do
   @moduledoc """
   Sends Keepalive messages to Discord.
 
@@ -14,7 +14,7 @@ defmodule Datcord.WebSocket.Handlers.Keepalive do
   end
 
   use GenEvent
-  alias Datcord.WebSocket.Client
+  alias Datcord.Connection.WebSocket
   require Logger
 
   @ready_states [:ready, :resumed]
@@ -68,7 +68,7 @@ defmodule Datcord.WebSocket.Handlers.Keepalive do
   @spec send_keepalive(pid) :: :ok
   def send_keepalive(ws_client_pid) do
     Logger.debug("Sending keepalive")
-    Client.cast(ws_client_pid, keepalive_msg)
+    WebSocket.cast(ws_client_pid, keepalive_msg)
   end
 
   @spec keepalive_msg :: String.t

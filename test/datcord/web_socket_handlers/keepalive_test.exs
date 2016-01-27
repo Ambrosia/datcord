@@ -1,6 +1,6 @@
-defmodule Datcord.WebSocket.Handlers.KeepaliveTest do
+defmodule Datcord.WebSocketHandlers.KeepaliveTest do
   use ExUnit.Case, async: true
-  alias Datcord.WebSocket.Handlers.Keepalive
+  alias Datcord.WebSocketHandlers.Keepalive
 
   setup do
     {:ok, pid} = GenEvent.start
