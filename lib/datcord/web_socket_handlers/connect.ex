@@ -4,12 +4,13 @@ defmodule Datcord.WebSocketHandlers.Connect do
   """
 
   use GenEvent
+  alias Datcord.Connection
   alias Datcord.Connection.WebSocket
   require Logger
 
-  def init(token) do
+  def init(server_pid) do
     Logger.debug("Connect handler started")
-    {:ok, token}
+    {:ok, Connection.Server.state(server_pid).token}
   end
 
   def handle_event({:connected, ws_client_pid}, token) do

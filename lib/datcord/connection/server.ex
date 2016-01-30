@@ -1,6 +1,5 @@
 defmodule Datcord.Connection.Server do
   use GenServer
-  alias Datcord.Connection
 
   defmodule State do
     defstruct [:token, :state_pid, :gen_event_pid, :websocket_pid]
@@ -8,8 +7,8 @@ defmodule Datcord.Connection.Server do
 
   ## Public API
 
-  def start_link(sup_pid, token) do
-    GenServer.start_link(__MODULE__, [sup_pid, token])
+  def start_link(token) do
+    GenServer.start_link(__MODULE__, token)
   end
 
   def state(pid), do: GenServer.call(pid, :state)
@@ -28,21 +27,32 @@ defmodule Datcord.Connection.Server do
 
   ## Private API
 
-  def init([sup_pid, token]) do
+  def init(token) do
     {:ok, %State{token: token}}
   end
 
   def handle_call(:state, _from, state), do: {:reply, state, state}
 
   def handle_cast({:update_state_pid, pid}, state) do
-    {:ok, %State{state | state_pid: pid}}
+    {:noreply, %State{state | state_pid: pid}}
   end
 
   def handle_cast({:update_gen_event_pid, pid}, state) do
-    {:ok, %State{state | gen_event_pid: pid}}
+    state = %State{state | gen_event_pid: pid}
+    send_event_pid(state)
+    {:noreply, state}
   end
 
   def handle_cast({:update_websocket_pid, pid}, state) do
-    {:ok, %State{state | websocket_pid: pid}}
+    state = %State{state | websocket_pid: pid}
+    send_event_pid(state)
+    {:noreply, state}
   end
+
+  def send_event_pid(%State{gen_event_pid: evpid, websocket_pid: wspid})
+  when is_pid(evpid) and is_pid(wspid) do
+    send(wspid, {:gen_event_pid, evpid, self})
+  end
+
+  def send_event_pid(_), do: nil
 end

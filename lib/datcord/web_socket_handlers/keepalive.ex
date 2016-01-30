@@ -8,7 +8,7 @@ defmodule Datcord.WebSocketHandlers.Keepalive do
   """
 
   defmodule State do
-    defstruct [:interval, :tref, :ws_client_pid]
+    defstruct [:interval, :tref, :websocket_pid]
 
     @type t :: %State{}
   end
@@ -24,15 +24,15 @@ defmodule Datcord.WebSocketHandlers.Keepalive do
     {:ok, %State{}}
   end
 
-  def handle_event({:connected, ws_client_pid}, state) do
-    {:ok, %State{state | ws_client_pid: ws_client_pid}}
+  def handle_event({:connected, websocket_pid}, state) do
+    {:ok, %State{state | websocket_pid: websocket_pid}}
   end
 
   def handle_event({:message, event_type, msg}, state)
   when event_type in @ready_states do
     Logger.debug("READY or RESUME event received")
     %{"d" => %{"heartbeat_interval" => interval}} = msg
-    {:ok, handle_heartbeat(interval, state, state.ws_client_pid)}
+    {:ok, handle_heartbeat(interval, state, state.websocket_pid)}
   end
 
   def handle_event(_, state) do
@@ -45,30 +45,30 @@ defmodule Datcord.WebSocketHandlers.Keepalive do
   @spec handle_heartbeat(integer, State.t, pid) :: State.t
   defp handle_heartbeat(same, state = %State{interval: same}, _), do: state
 
-  defp handle_heartbeat(new_interval, state, ws_client_pid) do
+  defp handle_heartbeat(new_interval, state, websocket_pid) do
     Logger.debug("New heartbeat interval detected")
-    {:ok, tref} = new_timer(new_interval, ws_client_pid, state)
+    {:ok, tref} = new_timer(new_interval, websocket_pid, state)
     %State{state | interval: new_interval, tref: tref}
   end
 
   # Stops the currently running timer and starts a new one with the given
   # interval. The new timer reference is stored in `state`.
-  defp new_timer(new_interval, ws_client_pid, state) do
+  defp new_timer(new_interval, websocket_pid, state) do
     Logger.debug("New timer, sending keepalive every #{new_interval}ms")
     :timer.cancel(state.tref)
     {:ok, _tref} = :timer.apply_interval(new_interval,
                                          __MODULE__,
                                          :send_keepalive,
-                                         [ws_client_pid])
+                                         [websocket_pid])
   end
 
   @doc """
   Sends the Keepalive message to the given websocket client.
   """
   @spec send_keepalive(pid) :: :ok
-  def send_keepalive(ws_client_pid) do
+  def send_keepalive(websocket_pid) do
     Logger.debug("Sending keepalive")
-    WebSocket.cast(ws_client_pid, keepalive_msg)
+    WebSocket.cast(websocket_pid, keepalive_msg)
   end
 
   @spec keepalive_msg :: String.t
