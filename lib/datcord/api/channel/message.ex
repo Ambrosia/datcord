@@ -1,9 +1,6 @@
 defmodule Datcord.API.Channel.Message do
   @moduledoc """
   Discord's Message API.
-
-  If a token is stored using `Token`, all `token` arguments
-  are optional.
   """
 
   @typedoc """
@@ -16,7 +13,6 @@ defmodule Datcord.API.Channel.Message do
   """
   @type new_message :: String.t | MessageBuilder.Message.t
 
-  alias Datcord.Connection.Token
   alias Datcord.{API, Model, MessageBuilder}
 
   @doc """
@@ -24,20 +20,20 @@ defmodule Datcord.API.Channel.Message do
 
   - `channel` can either be a `Model.Channel` struct or a channel id.
   - `params` is a map with the values of `before`, `after` and `limit`.
-    This is not required, neither are any of the values in the map.
+  None of the values inside the map are required, i.e. an empty map is fine.
     - `before` gets messages that were sent before the message with this id.
     - `after` gets messages that were send after the message with this id.
     - `limit` is the maximum amount of messages to download.
       This is capped at 100.
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.Message.messages(channel)
+      iex> API.Channel.Message.messages(channel, %{}, "abc")
       {:ok, [%Model.Message{...}]}
   """
-  @spec messages(Model.Channel.t | String.t, map, Token.maybe) :: API.maybe([Model.Message.t])
-  def messages(channel, params \\ %{}, token \\ nil) do
+  @spec messages(Model.Channel.t | String.t, map, String.t) :: API.maybe([Model.Message.t])
+  def messages(channel, params \\ %{}, token) do
     url = case params do
             x when x == %{} -> Model.Message.url(channel)
             x -> Model.Message.url(channel) <> "?" <> URI.encode_query(x)
@@ -54,20 +50,20 @@ defmodule Datcord.API.Channel.Message do
 
   - `channel` can either be a `Model.Channel` struct or a channel id.
   - `params` is a map with the values of `before`, `after` and `limit`.
-    This is not required, neither are any of the values in the map.
+    None of the values inside the map are required, i.e. an empty map is fine.
     - `before` gets messages that were sent before the message with this id.
     - `after` gets messages that were send after the message with this id.
     - `limit` is the maximum amount of messages to download.
       This is capped at 100.
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.Message.messages!(channel)
+      iex> API.Channel.Message.messages!(channel, %{}, "abc")
       [%Model.Message{...}]
   """
-  @spec messages!(Model.Channel.t, map, Token.maybe) :: [Model.Message.t] | no_return
-  def messages!(channel, params \\ %{}, token \\ nil) do
+  @spec messages!(Model.Channel.t, map, String.t) :: [Model.Message.t] | no_return
+  def messages!(channel, params \\ %{}, token) do
     case messages(channel, params, token) do
       {:ok, channel_messages} -> channel_messages
       {:error, error = %HTTPoison.Error{}} -> raise error
@@ -80,15 +76,15 @@ defmodule Datcord.API.Channel.Message do
 
   - `channel` can either be a `Model.Channel` struct or a channel id.
   - `new_message` can either be a string or a `MessageBuilder.Message` struct
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.Message.send(channel, message)
+      iex> API.Channel.Message.send(channel, message, "abc")
       {:ok, %Model.Message{...}}
   """
-  @spec send(Model.Channel.t | String.t, new_message, Token.maybe) :: API.maybe(Model.Message.t)
-  def send(channel, message, token \\ nil)
+  @spec send(Model.Channel.t | String.t, new_message, String.t) :: API.maybe(Model.Message.t)
+  def send(channel, message, token)
 
   def send(channel, message, token) when is_binary(message) do
     send(channel, MessageBuilder.text(message), token)
@@ -107,15 +103,15 @@ defmodule Datcord.API.Channel.Message do
 
   - `channel` can either be a `Model.Channel` struct or a channel id.
   - `new_message` can either be a string or a `MessageBuilder.Message` struct
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.Message.send!(channel, message)
+      iex> API.Channel.Message.send!(channel, message, "abc")
       %Model.Message{...}
   """
-  @spec send!(Model.Channel.t, new_message, Token.maybe) :: Model.Message.t | no_return
-  def send!(channel, message, token \\ nil) do
+  @spec send!(Model.Channel.t, new_message, String.t) :: Model.Message.t | no_return
+  def send!(channel, message, token) do
     case send(channel, message, token) do
       {:ok, message} -> message
       {:error, error = %HTTPoison.Error{}} -> raise error
@@ -127,15 +123,15 @@ defmodule Datcord.API.Channel.Message do
 
   - `message` is a `Model.Message` struct.
   - `new_message` can either be a string or a `MessageBuilder.Message` struct
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.Message.edit(message, new_message)
+      iex> API.Channel.Message.edit(message, new_message, "abc")
       {:ok, %Model.Message{...}}
   """
-  @spec edit(Model.Message.t, new_message, Token.maybe) :: API.maybe(Model.Message.t)
-  def edit(message, new_message, token \\ nil)
+  @spec edit(Model.Message.t, new_message, String.t) :: API.maybe(Model.Message.t)
+  def edit(message, new_message, token)
 
   def edit(message, new_message, token) when is_binary(new_message) do
     edit(message, MessageBuilder.text(new_message), token)
@@ -156,15 +152,15 @@ defmodule Datcord.API.Channel.Message do
 
   - `message` is a `Model.Message` struct.
   - `new_message` can either be a string or a `MessageBuilder.Message` struct
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.Message.edit!(message, new_message)
+      iex> API.Channel.Message.edit!(message, new_message, "abc")
       %Model.Message{...}
   """
-  @spec edit!(Model.Message.t, new_message, Token.maybe) :: Model.Message.t | no_return
-  def edit!(message, new_message, token \\ nil) do
+  @spec edit!(Model.Message.t, new_message, String.t) :: Model.Message.t | no_return
+  def edit!(message, new_message, token) do
     case edit(message, new_message, token) do
       {:ok, message} -> message
       {:error, error = %HTTPoison.Error{}} -> raise error
@@ -175,15 +171,15 @@ defmodule Datcord.API.Channel.Message do
   Deletes the given message.
 
   - `message` is a `Model.Message` struct.
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.Message.delete(message)
+      iex> API.Channel.Message.delete(message, "abc")
       :ok
   """
-  @spec delete(Model.Message.t, Token.maybe) :: :ok | {:error, HTTPoison.Error.t}
-  def delete(message = %Model.Message{}, token \\ nil) do
+  @spec delete(Model.Message.t, String.t) :: :ok | {:error, HTTPoison.Error.t}
+  def delete(message = %Model.Message{}, token) do
     url = Model.Message.url(message)
     headers = API.token_header(token)
 
@@ -195,15 +191,15 @@ defmodule Datcord.API.Channel.Message do
   Marks the given message as read.
 
   - `message` is a `Model.Message` struct.
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.Message.ack(message)
+      iex> API.Channel.Message.ack(message, "abc")
       :ok
   """
-  @spec ack(Model.Message.t, Token.maybe) :: :ok | {:error, HTTPoison.Error.t}
-  def ack(message = %Model.Message{}, token \\ nil) do
+  @spec ack(Model.Message.t, String.t) :: :ok | {:error, HTTPoison.Error.t}
+  def ack(message = %Model.Message{}, token) do
     url = Model.Message.url(message) <> "/ack"
     headers = API.token_header(token)
 
@@ -215,13 +211,13 @@ defmodule Datcord.API.Channel.Message do
   Marks the given message as read.
 
   - `message` is a `Model.Message` struct.
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-  iex> API.Channel.Message.read(message)
+  iex> API.Channel.Message.read(message, "abc")
   :ok
   """
-  @spec read(Model.Message.t, Token.maybe) :: :ok | {:error, HTTPoison.Error.t}
-  def read(message = %Model.Message{}, token \\ nil), do: ack(message, token)
+  @spec read(Model.Message.t, String.t) :: :ok | {:error, HTTPoison.Error.t}
+  def read(message = %Model.Message{}, token), do: ack(message, token)
 end

@@ -3,9 +3,6 @@ defmodule Datcord.API.Guild do
   Discord's Guild API.
 
   Guilds are referred to as servers everywhere else.
-
-  If a token is stored using `Token`, all `token` arguments
-  are optional.
   """
 
   @typedoc """
@@ -13,22 +10,20 @@ defmodule Datcord.API.Guild do
   """
   @type guild :: String.t | Model.Guild.t
 
-  alias Datcord.Connection.Token
   alias Datcord.{API, Model}
 
   @doc """
   Creates a guild using the given name.
 
   - `token` is the API token to use.
-    This is optional if `Token` is used.
 
   ## Example
 
-      iex> API.Guild.create("Nice server")
+      iex> API.Guild.create("Nice server", "abc")
       {:ok, %Model.Guild{...}}
   """
-  @spec create(String.t, Token.maybe) :: API.maybe(Model.Guild.t)
-  def create(name, token \\ nil) when is_binary(name) do
+  @spec create(String.t, String.t) :: API.maybe(Model.Guild.t)
+  def create(name, token) when is_binary(name) do
     headers = API.token_header(token)
 
     with :ok <- validate_name_length(name),
@@ -41,15 +36,14 @@ defmodule Datcord.API.Guild do
 
   - `name` is the name to use for the guild.
   - `token` is the API token to use.
-    This is optional if `Token` is used.
 
   ## Example
 
-      iex> API.Guild.create!("Nice server")
+      iex> API.Guild.create!("Nice server", "abc")
       %Model.Guild{...}
   """
-  @spec create!(String.t, Token.maybe) :: Model.Guild.t | no_return
-  def create!(name, token \\ nil) do
+  @spec create!(String.t, String.t) :: Model.Guild.t | no_return
+  def create!(name, token) do
     case create(name, token) do
       {:ok, guild} -> guild
       {:error, error = %HTTPoison.Error{}} -> raise error
@@ -63,15 +57,14 @@ defmodule Datcord.API.Guild do
   - `guild` can either be a `Guild` struct or the guild's id (string).
   - `name` is the guild's new name.
   - `token` is the API token to use.
-    This is optional if `Token` is used.
 
   ## Example
 
-      iex> API.Guild.edit("123", "New name")
+      iex> API.Guild.edit("123", "New name", "abc")
       {:ok, %Model.Guild{...}}
   """
-  @spec edit(guild, String.t, Token.maybe) :: API.maybe(Model.Guild.t)
-  def edit(guild, name, token \\ nil) when is_binary(name) do
+  @spec edit(guild, String.t, String.t) :: API.maybe(Model.Guild.t)
+  def edit(guild, name, token) when is_binary(name) do
     url = Model.Guild.url(guild)
     headers = API.token_header(token)
 
@@ -85,15 +78,14 @@ defmodule Datcord.API.Guild do
 
   - `guild` can either be a `Guild` struct or the guild's id (string).
   - `token` is the API token to use.
-    This is optional if `Token` is used.
 
   ## Example
 
-      iex> API.Guild.edit!("123", "New name")
+      iex> API.Guild.edit!("123", "New name", "abc")
       %Model.Guild{...}
   """
-  @spec edit!(guild, String.t, Token.maybe) :: Model.Guild.t | no_return
-  def edit!(guild, name, token \\ nil) when is_binary(name) do
+  @spec edit!(guild, String.t, String.t) :: Model.Guild.t | no_return
+  def edit!(guild, name, token) when is_binary(name) do
     case edit(guild, name, token) do
       {:ok, guild} -> guild
       {:error, error = %HTTPoison.Error{}} -> raise error
@@ -106,15 +98,14 @@ defmodule Datcord.API.Guild do
 
   - `guild` can either be a `Guild` struct or the guild's id (string).
   - `token` is the API token to use.
-    This is optional if `Token` is used.
 
   ## Example
 
-      iex> API.Guild.delete("123")
+      iex> API.Guild.delete("123", "abc")
       {:ok, API.Guild{...}}
   """
-  @spec delete(guild, Token.maybe) :: API.maybe(Model.Guild.t)
-  def delete(guild, token \\ nil) do
+  @spec delete(guild, String.t) :: API.maybe(Model.Guild.t)
+  def delete(guild, token) do
     url = Model.Guild.url(guild)
     headers = API.token_header(token)
 
@@ -127,15 +118,14 @@ defmodule Datcord.API.Guild do
 
   - `guild` can either be a `Guild` struct or the guild's id (string).
   - `token` is the API token to use.
-    This is optional if `Token` is used.
 
   ## Example
 
-      iex> API.Guild.delete!("123")
+      iex> API.Guild.delete!("123", "abc")
       API.Guild{...}
   """
-  @spec delete!(guild, Token.maybe) :: Model.Guild.t | no_return
-  def delete!(guild, token \\ nil) do
+  @spec delete!(guild, String.t) :: Model.Guild.t | no_return
+  def delete!(guild, token) do
     case delete(guild, token) do
       {:ok, guild} -> guild
       {:error, error = %HTTPoison.Error{}} -> raise error
@@ -147,15 +137,14 @@ defmodule Datcord.API.Guild do
   Gets all guilds this user is currently in.
 
   - `token` is the API token to use.
-    This is optional if `Token` is used.
 
   ## Example
 
-      iex> API.Guild.guilds
+      iex> API.Guild.guilds("abc")
       {:ok, [API.Guild{...}, ...]}
   """
-  @spec guilds(Token.maybe) :: API.maybe([Model.Guild.t])
-  def guilds(token \\ nil) do
+  @spec guilds(String.t) :: API.maybe([Model.Guild.t])
+  def guilds(token) do
     headers = API.token_header(token)
 
     with {:ok, response} <- API.get("/users/@me/guilds", headers),
@@ -167,15 +156,14 @@ defmodule Datcord.API.Guild do
   Gets all guilds this user is currently in.
 
   - `token` is the API token to use.
-    This is optional if `Token` is used.
 
   ## Example
 
-      iex> API.Guild.guilds!
+      iex> API.Guild.guilds!("abc")
       [API.Guild{...}, ...]
   """
-  @spec guilds!(Token.maybe) :: [Model.Guild.t] | no_return
-  def guilds!(token \\ nil) do
+  @spec guilds!(String.t) :: [Model.Guild.t] | no_return
+  def guilds!(token) do
     case guilds(token) do
       {:ok, user_guilds} -> user_guilds
       {:error, error = %HTTPoison.Error{}} -> raise error

@@ -1,9 +1,6 @@
 defmodule Datcord.API.Channel do
   @moduledoc """
   Discord's Channel API.
-
-  If a token is stored using `Token`, all `token` arguments
-  are optional.
   """
 
   @typedoc """
@@ -11,7 +8,6 @@ defmodule Datcord.API.Channel do
   """
   @type channel :: String.t | Model.Channel.t
 
-  alias Datcord.Connection.Token
   alias Datcord.{API, Model}
 
   @type create_params :: %{name: String.t, type: :text | :voice}
@@ -23,17 +19,16 @@ defmodule Datcord.API.Channel do
   - `params` is a map with the values of `name` and `type`.
     These are both required.
     - `name` must be a string 2-100 characters long.
-    - `type` must either be `:text` or `:voice`.
-      This is optional.
-  - `token` is the API token to use. This is optional if `Token` is used.
+    - `type` must either be `:text` or `:voice`. This is optional.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.create(guild, %{name: "channel", type: :text})
+      iex> API.Channel.create(guild, %{name: "channel", type: :text}, "abc")
       {:ok, %Model.Channel{...}}
   """
-  @spec create(Model.Guild.t, create_params, Token.maybe) :: API.maybe(Model.Channel.t)
-  def create(guild, params, token \\ nil) do
+  @spec create(Model.Guild.t, create_params, String.t) :: API.maybe(Model.Channel.t)
+  def create(guild, params, token) do
     name = Map.get(params, :name)
     type = Map.get(params, :type, :text)
 
@@ -54,15 +49,15 @@ defmodule Datcord.API.Channel do
     These are both required.
     - `name` must be a string 2-100 characters long.
     - `type` must either be `:text` or `:voice`.
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.create!(guild, %{name: "channel", type: :text})
+      iex> API.Channel.create!(guild, %{name: "channel", type: :text}, "abc")
       %Model.Channel{...}
   """
-  @spec create!(Model.Guild.t, create_params, Token.maybe) :: Model.Channel.t | no_return
-  def create!(guild, params, token \\ nil) do
+  @spec create!(Model.Guild.t, create_params, String.t) :: Model.Channel.t | no_return
+  def create!(guild, params, token) do
     case create(guild, params, token) do
       {:ok, channel} -> channel
       {:error, error = %HTTPoison.Error{}} -> raise error
@@ -83,15 +78,15 @@ defmodule Datcord.API.Channel do
     - `position` is the position in the channel list to change to.
     Must be an int over -1.
     - `topic` is the topic to use for the channel. Must be a string.
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.edit(channel, %{name: "cool-kids"})
+      iex> API.Channel.edit(channel, %{name: "cool-kids"}, "abc")
       {:ok, %Model.Channel{...}}
   """
-  @spec edit(channel, edit_params, Token.maybe) :: API.maybe(Model.Channel.t)
-  def edit(channel, params, token \\ nil)
+  @spec edit(channel, edit_params, String.t) :: API.maybe(Model.Channel.t)
+  def edit(channel, params, token)
   def edit(channel = %Model.Channel{}, params, token) do
     params = params
     |> Map.put_new(:name, channel.name)
@@ -122,15 +117,15 @@ defmodule Datcord.API.Channel do
     - `position` is the position in the channel list to change to.
       Must be an int over -1.
     - `topic` is the topic to use for the channel. Must be a string.
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.edit!(channel, %{name: "cool-kids"})
+      iex> API.Channel.edit!(channel, %{name: "cool-kids"}, "abc")
       %Model.Channel{...}
   """
-  @spec edit!(Model.Channel.t, edit_params, Token.maybe) :: Model.Channel.t | no_return
-  def edit!(channel, params, token \\ nil) do
+  @spec edit!(Model.Channel.t, edit_params, String.t) :: Model.Channel.t | no_return
+  def edit!(channel, params, token) do
     case edit(channel, params, token) do
       {:ok, channel} -> channel
       {:error, error = %HTTPoison.Error{}} -> raise error
@@ -142,15 +137,15 @@ defmodule Datcord.API.Channel do
   Deletes a channel.
 
   - `channel` can either be a `Channel` struct or the channel's id (string).
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.delete(channel)
+      iex> API.Channel.delete(channel, "abc")
       {:ok, %Model.Channel{...}}
   """
-  @spec delete(Model.Channel.t, Token.maybe) :: API.maybe(Model.Channel.t)
-  def delete(channel, token \\ nil) do
+  @spec delete(Model.Channel.t, String.t) :: API.maybe(Model.Channel.t)
+  def delete(channel, token) do
     url = Model.Channel.url(channel)
     headers = API.token_header(token)
 
@@ -162,15 +157,15 @@ defmodule Datcord.API.Channel do
   Deletes a channel.
 
   - `channel` can either be a `Channel` struct or the channel's id (string).
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.delete!(channel)
+      iex> API.Channel.delete!(channel, "abc")
       API.Channel{...}
   """
-  @spec delete!(Model.Channel.t, Token.maybe) :: Model.Channel.t | no_return
-  def delete!(channel, token \\ nil) do
+  @spec delete!(Model.Channel.t, String.t) :: Model.Channel.t | no_return
+  def delete!(channel, token) do
     case delete(channel, token) do
       {:ok, channel} -> channel
       {:error, error = %HTTPoison.Error{}} -> raise error
@@ -184,15 +179,15 @@ defmodule Datcord.API.Channel do
   The typing notification lasts for 5 seconds.
 
   - `channel` can either be a `Channel` struct or the channel's id (string).
-  - `token` is the API token to use. This is optional if `Token` is used.
+  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Channel.broadcast_typing(channel)
+      iex> API.Channel.broadcast_typing(channel, "abc")
       :ok
   """
-  @spec broadcast_typing(Model.Channel.t, Token.maybe) :: :ok | {:error, any}
-  def broadcast_typing(channel, token \\ nil) do
+  @spec broadcast_typing(Model.Channel.t, String.t) :: :ok | {:error, any}
+  def broadcast_typing(channel, token) do
     url = Model.Channel.url(channel) <> "/typing"
     headers = API.token_header(token)
 

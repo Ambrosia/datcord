@@ -12,7 +12,6 @@ defmodule Datcord.API do
                        | {:error, atom}
 
   use HTTPoison.Base
-  alias Datcord.Connection.Token
 
   @endpoint "https://discordapp.com/api"
 
@@ -38,13 +37,9 @@ defmodule Datcord.API do
   @doc """
   Returns a token header.
 
-  If `nil` is passed, this attempts to get the token from the
-  `Datcord.Connection.Token` agent. This will fail if not used.
-
   As this is already a list, it must be merged to be used with other headers.
   """
-  @spec token_header(String.t | nil) :: HTTPoison.headers
-  def token_header(nil), do: Token.get |> token_header
+  @spec token_header(String.t) :: HTTPoison.headers
   def token_header(token), do: [{"Authorization", token}]
 
   @spec add_json_headers(HTTPoison.headers) :: HTTPoison.headers
