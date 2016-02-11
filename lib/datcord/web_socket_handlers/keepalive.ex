@@ -14,7 +14,7 @@ defmodule Datcord.WebSocketHandlers.Keepalive do
   end
 
   use GenEvent
-  alias Datcord.Connection.WebSocket
+  alias Datcord.WebSocket
   require Logger
 
   @ready_states [:ready, :resumed]
