@@ -64,7 +64,7 @@ Library to make interacting with Discord in Elixir easier.
 
 ### Other
 - [ ] State tracker (updated by HTTP calls and WebSocket events)
-- [ ] Refactoring HTTP API functions and supervision tree
+- [ ] Refactoring HTTP API functions
 - [ ] Rate limiting on HTTP calls
 
 ## Future
