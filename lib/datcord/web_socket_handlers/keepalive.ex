@@ -39,14 +39,8 @@ defmodule Datcord.WebSocketHandlers.Keepalive do
     {:ok, state}
   end
 
-  # Detects change in heartbeat intervals.
-  # If the interval received differs from the one stored in `state`,
-  # `new_timer/3` is called.
   @spec handle_heartbeat(integer, State.t, pid) :: State.t
-  defp handle_heartbeat(same, state = %State{interval: same}, _), do: state
-
   defp handle_heartbeat(new_interval, state, websocket_pid) do
-    Logger.debug("New heartbeat interval detected")
     {:ok, tref} = new_timer(new_interval, websocket_pid, state)
     %State{state | interval: new_interval, tref: tref}
   end
