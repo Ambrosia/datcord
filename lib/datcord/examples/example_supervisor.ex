@@ -14,6 +14,8 @@ defmodule Datcord.Examples.ExampleSupervisor do
   end
 
   def start_children(supervisor_pid, token) do
+    # A GenEvent must be started and handlers added before starting
+    # the websocket connection.
     gen_event_spec = worker(GenEvent, [])
     {:ok, gen_event} = Supervisor.start_child(supervisor_pid, gen_event_spec)
 
@@ -24,6 +26,7 @@ defmodule Datcord.Examples.ExampleSupervisor do
   end
 
   defp start_handlers(gen_event, token) do
+    # These two handlers are required to keep a connection to Discord alive
     :ok = GenEvent.add_handler(gen_event, Connect, token)
     :ok = GenEvent.add_handler(gen_event, Keepalive, [])
   end
