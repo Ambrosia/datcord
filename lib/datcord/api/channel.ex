@@ -158,7 +158,7 @@ defmodule Datcord.API.Channel do
   ## Example
 
       iex> API.Channel.delete!("abc", channel)
-      API.Channel{...}
+      %Model.Channel{...}
   """
   @spec delete!(String.t, Model.Channel.t) :: Model.Channel.t | no_return
   def delete!(token, channel) do

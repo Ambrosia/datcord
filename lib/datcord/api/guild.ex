@@ -100,7 +100,7 @@ defmodule Datcord.API.Guild do
   ## Example
 
       iex> API.Guild.delete("abc", "123")
-      {:ok, API.Guild{...}}
+      {:ok, %Model.Guild{...}}
   """
   @spec delete(String.t, guild) :: API.maybe(Model.Guild.t)
   def delete(token, guild) do
@@ -120,7 +120,7 @@ defmodule Datcord.API.Guild do
   ## Example
 
       iex> API.Guild.delete!("abc", "123")
-      API.Guild{...}
+      %Model.Guild{...}
   """
   @spec delete!(String.t, guild) :: Model.Guild.t | no_return
   def delete!(token, guild) do
@@ -139,7 +139,7 @@ defmodule Datcord.API.Guild do
   ## Example
 
       iex> API.Guild.guilds("abc")
-      {:ok, [API.Guild{...}, ...]}
+      {:ok, [%Model.Guild{...}, ...]}
   """
   @spec guilds(String.t) :: API.maybe([Model.Guild.t])
   def guilds(token) do
@@ -158,7 +158,7 @@ defmodule Datcord.API.Guild do
   ## Example
 
       iex> API.Guild.guilds!("abc")
-      [API.Guild{...}, ...]
+      [%Model.Guild{...}, ...]
   """
   @spec guilds!(String.t) :: [Model.Guild.t] | no_return
   def guilds!(token) do
