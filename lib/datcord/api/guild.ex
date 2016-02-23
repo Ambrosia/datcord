@@ -92,6 +92,31 @@ defmodule Datcord.API.Guild do
   end
 
   @doc """
+  Leaves the given guild.
+
+  It's impossible to leave a guild the user currently owns. Either delete the
+  guild or transfer ownership to another user first.
+
+  - `token` is the API token to use.
+  - `guild` can either be a `Guild` struct or the guild's id (string).
+
+  ## Example
+
+      iex> API.Guild.leave("abc", "123")
+      :ok
+  """
+  @spec leave(String.t, guild) :: API.maybe(Model.Guild.t)
+  def leave(token, guild) do
+    url = "/users/@me" <> Model.Guild.url(guild)
+    headers = API.token_header(token)
+
+    case API.delete(url, headers) do
+      {:ok, _response} -> :ok
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  @doc """
   Deletes the given guild.
 
   - `guild` can either be a `Guild` struct or the guild's id (string).
@@ -143,9 +168,10 @@ defmodule Datcord.API.Guild do
   """
   @spec guilds(String.t) :: API.maybe([Model.Guild.t])
   def guilds(token) do
+    url = "/users/@me" <> Model.Guild.url
     headers = API.token_header(token)
 
-    with {:ok, response} <- API.get("/users/@me/guilds", headers),
+    with {:ok, response} <- API.get(url, headers),
          user_guilds = Model.Guild.parse(response.body),
          do: {:ok, user_guilds}
   end
@@ -164,6 +190,46 @@ defmodule Datcord.API.Guild do
   def guilds!(token) do
     case guilds(token) do
       {:ok, user_guilds} -> user_guilds
+      {:error, error = %HTTPoison.Error{}} -> raise error
+      {:error, error} -> raise ArgumentError, Atom.to_string(error)
+    end
+  end
+
+  @doc """
+  Gets all channels belonging to the given guild.
+
+  - `token` is the API token to use.
+  - `guild` can either be a Guild struct or the guild's id (string).
+
+  ## Example
+
+      iex> API.Guild.channels("abc", "123")
+      {:ok, [%Model.Channel{...}, ...]}
+  """
+  @spec channels(String.t, guild) :: API.maybe([Model.Channel.t])
+  def channels(token, guild) do
+    url = Model.Guild.url(guild) <> "/channels"
+    headers = API.token_header(token)
+
+    with {:ok, response} <- API.get(url, headers),
+         do: {:ok, Model.Channel.parse(response.body)}
+  end
+
+  @doc """
+  Gets all channels belonging to the given guild.
+
+  - `token` is the API token to use.
+  - `guild` can either be a Guild struct or the guild's id (string).
+
+  ## Example
+
+      iex> API.Guild.channels!("abc", "123")
+      [%Model.Channel{...}, ...]
+  """
+  @spec channels(String.t, guild) :: [Model.Channel.t] | no_return
+  def channels!(token, guild) do
+    case channels(token, guild) do
+      {:ok, user_channels} -> user_channels
       {:error, error = %HTTPoison.Error{}} -> raise error
       {:error, error} -> raise ArgumentError, Atom.to_string(error)
     end
