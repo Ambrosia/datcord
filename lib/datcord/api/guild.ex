@@ -19,11 +19,11 @@ defmodule Datcord.API.Guild do
 
   ## Example
 
-      iex> API.Guild.create("Nice server", "abc")
+      iex> API.Guild.create("abc", "Nice server")
       {:ok, %Model.Guild{...}}
   """
   @spec create(String.t, String.t) :: API.maybe(Model.Guild.t)
-  def create(name, token) when is_binary(name) do
+  def create(token, name) when is_binary(name) do
     headers = API.token_header(token)
 
     with :ok <- validate_name_length(name),
@@ -34,17 +34,17 @@ defmodule Datcord.API.Guild do
   @doc """
   Creates a guild using the given name.
 
-  - `name` is the name to use for the guild.
   - `token` is the API token to use.
+  - `name` is the name to use for the guild.
 
   ## Example
 
-      iex> API.Guild.create!("Nice server", "abc")
+      iex> API.Guild.create!("abc", "Nice server")
       %Model.Guild{...}
   """
   @spec create!(String.t, String.t) :: Model.Guild.t | no_return
-  def create!(name, token) do
-    case create(name, token) do
+  def create!(token, name) do
+    case create(token, name) do
       {:ok, guild} -> guild
       {:error, error = %HTTPoison.Error{}} -> raise error
       {:error, error} -> raise ArgumentError, Atom.to_string(error)
@@ -54,17 +54,17 @@ defmodule Datcord.API.Guild do
   @doc """
   Changes the given guild's name.
 
+  - `token` is the API token to use.
   - `guild` can either be a `Guild` struct or the guild's id (string).
   - `name` is the guild's new name.
-  - `token` is the API token to use.
 
   ## Example
 
-      iex> API.Guild.edit("123", "New name", "abc")
+      iex> API.Guild.edit("abc", "123", "New name")
       {:ok, %Model.Guild{...}}
   """
-  @spec edit(guild, String.t, String.t) :: API.maybe(Model.Guild.t)
-  def edit(guild, name, token) when is_binary(name) do
+  @spec edit(String.t, guild, String.t) :: API.maybe(Model.Guild.t)
+  def edit(token, guild, name) when is_binary(name) do
     url = Model.Guild.url(guild)
     headers = API.token_header(token)
 
@@ -76,17 +76,17 @@ defmodule Datcord.API.Guild do
   @doc """
   Changes the given guild's name.
 
-  - `guild` can either be a `Guild` struct or the guild's id (string).
   - `token` is the API token to use.
+  - `guild` can either be a `Guild` struct or the guild's id (string).
 
   ## Example
 
-      iex> API.Guild.edit!("123", "New name", "abc")
+      iex> API.Guild.edit!("abc", "123", "New name")
       %Model.Guild{...}
   """
-  @spec edit!(guild, String.t, String.t) :: Model.Guild.t | no_return
-  def edit!(guild, name, token) when is_binary(name) do
-    case edit(guild, name, token) do
+  @spec edit!(Stirng.t, guild, String.t) :: Model.Guild.t | no_return
+  def edit!(token, guild, name) when is_binary(name) do
+    case edit(token, guild, name) do
       {:ok, guild} -> guild
       {:error, error = %HTTPoison.Error{}} -> raise error
       {:error, error} -> raise ArgumentError, Atom.to_string(error)
@@ -101,11 +101,11 @@ defmodule Datcord.API.Guild do
 
   ## Example
 
-      iex> API.Guild.delete("123", "abc")
+      iex> API.Guild.delete("abc", "123")
       {:ok, API.Guild{...}}
   """
-  @spec delete(guild, String.t) :: API.maybe(Model.Guild.t)
-  def delete(guild, token) do
+  @spec delete(String.t, guild) :: API.maybe(Model.Guild.t)
+  def delete(token, guild) do
     url = Model.Guild.url(guild)
     headers = API.token_header(token)
 
@@ -121,12 +121,12 @@ defmodule Datcord.API.Guild do
 
   ## Example
 
-      iex> API.Guild.delete!("123", "abc")
+      iex> API.Guild.delete!("abc", "123")
       API.Guild{...}
   """
-  @spec delete!(guild, String.t) :: Model.Guild.t | no_return
-  def delete!(guild, token) do
-    case delete(guild, token) do
+  @spec delete!(String.t, guild) :: Model.Guild.t | no_return
+  def delete!(token, guild) do
+    case delete(token, guild) do
       {:ok, guild} -> guild
       {:error, error = %HTTPoison.Error{}} -> raise error
       {:error, error} -> raise ArgumentError, Atom.to_string(error)
