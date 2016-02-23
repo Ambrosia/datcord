@@ -82,7 +82,7 @@ defmodule Datcord.API.Guild do
       iex> API.Guild.edit!("abc", "123", "New name")
       %Model.Guild{...}
   """
-  @spec edit!(Stirng.t, guild, String.t) :: Model.Guild.t | no_return
+  @spec edit!(String.t, guild, String.t) :: Model.Guild.t | no_return
   def edit!(token, guild, name) when is_binary(name) do
     case edit(token, guild, name) do
       {:ok, guild} -> guild
