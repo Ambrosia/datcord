@@ -35,9 +35,7 @@ defmodule Datcord.API.Channel do
     url = Model.Guild.url(guild) <> "/channels"
     headers = API.token_header(token)
 
-    with :ok <- validate_channel_name(name),
-         :ok <- validate_channel_type(type),
-         {:ok, response} <- API.post(url, params, headers),
+    with {:ok, response} <- API.post(url, params, headers),
          do: {:ok, Model.Channel.parse(response.body)}
   end
 
@@ -100,9 +98,7 @@ defmodule Datcord.API.Channel do
     url = Model.Channel.url(channel)
     headers = API.token_header(token)
 
-    with :ok <- validate_channel_name(params.name),
-         :ok <- validate_channel_position(params.position),
-         {:ok, response} <- API.patch(url, params, headers),
+    with {:ok, response} <- API.patch(url, params, headers),
          do: {:ok, Model.Channel.parse(response.body)}
   end
 
@@ -196,23 +192,4 @@ defmodule Datcord.API.Channel do
       {:error, error} -> {:error, error}
     end
   end
-
-
-  @spec validate_channel_name(String.t) :: :ok | {:error, :invalid_channel_name}
-  defp validate_channel_name(name) do
-    if Regex.match?(~r/^[a-z0-9\-]{2,100}$/i, name) do
-      :ok
-    else
-      {:error, :invalid_channel_name}
-    end
-  end
-
-  @spec validate_channel_type(any) :: :ok | {:error, :invalid_channel_type}
-  defp validate_channel_type(type) when type in [:text, :voice], do: :ok
-  defp validate_channel_type(_type), do: {:error, :invalid_channel_type}
-
-  @spec validate_channel_position(any) :: :ok
-                                        | {:error, :invalid_channel_position}
-  defp validate_channel_position(pos) when is_integer(pos) and pos >= -1, do: :ok
-  defp validate_channel_position(_pos), do: {:error, :invalid_channel_position}
 end

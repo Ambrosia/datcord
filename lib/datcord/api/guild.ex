@@ -26,8 +26,7 @@ defmodule Datcord.API.Guild do
   def create(token, name) when is_binary(name) do
     headers = API.token_header(token)
 
-    with :ok <- validate_name_length(name),
-         {:ok, response} <- API.post(Model.Guild.url, %{name: name}, headers),
+    with {:ok, response} <- API.post(Model.Guild.url, %{name: name}, headers),
          do: {:ok, Model.Guild.parse(response.body)}
   end
 
@@ -68,8 +67,7 @@ defmodule Datcord.API.Guild do
     url = Model.Guild.url(guild)
     headers = API.token_header(token)
 
-    with :ok <- validate_name_length(name),
-         {:ok, response} <- API.patch(url, %{name: name}, headers),
+    with {:ok, response} <- API.patch(url, %{name: name}, headers),
          do: {:ok, Model.Guild.parse(response.body)}
   end
 
@@ -168,15 +166,6 @@ defmodule Datcord.API.Guild do
       {:ok, user_guilds} -> user_guilds
       {:error, error = %HTTPoison.Error{}} -> raise error
       {:error, error} -> raise ArgumentError, Atom.to_string(error)
-    end
-  end
-
-  @spec validate_name_length(String.t) :: :ok | {:error, :too_short | :too_long}
-  defp validate_name_length(name) do
-    case String.length(name) do
-      x when x < 2 -> {:error, :too_short}
-      x when x > 100 -> {:error, :too_long}
-      _ -> :ok
     end
   end
 end
